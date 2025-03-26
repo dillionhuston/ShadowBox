@@ -8,9 +8,7 @@ class db_operations():
         self.conn = sqlite3.connect('users.db', check_same_thread=False)
         self.c = self.conn.cursor()
 
-
-
-        # Create the 'accounts' table if not exists
+        # create accounts table if not exists
         self.c.execute('''CREATE TABLE IF NOT EXISTS accounts
                          (hash INTEGER PRIMARY KEY AUTOINCREMENT,
                          username TEXT NOT NULL UNIQUE,
@@ -25,19 +23,5 @@ class db_operations():
             print("User added successfully!")
         except sqlite3.IntegrityError:
             print("Error: Username or email already exists!")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     def __del__(self):
         self.conn.close()  # Close the DB connection when the object is deleted
