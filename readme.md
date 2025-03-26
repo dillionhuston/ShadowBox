@@ -26,6 +26,7 @@ cd shadowbox
 
 # Install dependencies
 pip install -r requirements.txt
+Run flask run inside /static folder/
 
 ```
 
