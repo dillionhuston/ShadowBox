@@ -4,8 +4,8 @@ from backend.auth import auth
 
 app = Flask(__name__, template_folder='frontend/templates')
 
-
 backend = db_operations()
+backend_auth = auth()
 
 @app.route('/')
 def index():
@@ -18,14 +18,24 @@ def signup():
         password = request.form.get('password')
         email = request.form.get('email')
         if username and password and email:
-            # Hash the password before storing
             hashed_password = auth.hash_password(password)
             backend.adduser(username, hashed_password, email)  
             return redirect('/login') 
     return render_template('signup.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        if username and password:
+            user = backend.get_user(username)
+            return user
+        passw = backend_auth.verify_password(password)
+        if user and passw:
+                # session variable needed
+                    print("User logged in")
     return render_template("login.html")
 
 @app.route('/upload')
