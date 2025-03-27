@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShadowBox - Secure Your Files</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
         /* Global Styles */
         * {
@@ -15,7 +15,7 @@
         }
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0f0f0f, #1e1e1e);
+            background: linear-gradient(135deg, #121212, #1f1f1f);
             color: #fff;
             display: flex;
             flex-direction: column;
@@ -24,126 +24,95 @@
             text-align: center;
             height: 100vh;
             padding: 20px;
+            overflow-x: hidden;
         }
-        
+
         /* Hero Section */
         .hero {
             background: url('https://via.placeholder.com/1600x800') no-repeat center center fixed;
             background-size: cover;
-            padding: 80px 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
+            padding: 100px 40px;
+            border-radius: 10px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            max-width: 90%;
             animation: fadeIn 1s ease-out;
-            transform: translateY(0);
-            transition: transform 0.5s ease-out;
         }
-        .hero:hover {
-            transform: translateY(-5px);
-        }
-        h1 {
+        .hero h1 {
             color: #00aaff;
             font-size: 50px;
             font-weight: 600;
             margin-bottom: 20px;
-            text-shadow: 0 0 15px rgba(0, 170, 255, 0.8);
-            animation: fadeIn 1s ease-in-out;
+            letter-spacing: 1px;
+            text-shadow: 0 0 25px rgba(0, 170, 255, 0.9);
         }
-        h2 {
+        .hero h2 {
             color: #fff;
-            font-size: 24px;
-            margin-bottom: 30px;
+            font-size: 22px;
+            margin-bottom: 25px;
+            font-weight: 400;
         }
-        p {
-            color: #ddd;
-            font-size: 18px;
+        .hero p {
+            color: #bbb;
+            font-size: 16px;
             margin-bottom: 30px;
-            animation: fadeIn 1s ease-in-out;
+            opacity: 0.8;
         }
         .cta-button {
             padding: 14px 28px;
-            background: linear-gradient(90deg, #007BFF, #00d4ff);
-            color: white;
+            background: #00aaff;
+            color: #fff;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 600;
             text-decoration: none;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.6);
+            border-radius: 6px;
+            box-shadow: 0 6px 25px rgba(0, 170, 255, 0.6);
             transition: 0.3s ease;
-            animation: fadeIn 1s ease-in-out;
         }
         .cta-button:hover {
-            background: linear-gradient(90deg, #0056b3, #0099ff);
-            box-shadow: 0 0 20px rgba(0, 123, 255, 0.8);
+            background: #0099cc;
+            box-shadow: 0 8px 30px rgba(0, 170, 255, 0.8);
         }
 
         /* Features Section */
         .features {
             display: flex;
             justify-content: center;
-            margin-top: 60px;
+            margin-top: 80px;
             width: 100%;
-            gap: 30px;
+            gap: 20px;
             flex-wrap: wrap;
             animation: fadeIn 2s ease-in-out;
         }
         .feature-box {
-            background: rgba(26, 26, 26, 0.95);
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            background: rgba(40, 40, 40, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(5px);
             width: 300px;
-            transition: transform 0.3s ease-in-out;
             opacity: 0;
             animation: fadeInUp 1s forwards;
         }
         .feature-box:nth-child(1) {
-            animation-delay: 0.5s;
+            animation-delay: 0.3s;
         }
         .feature-box:nth-child(2) {
-            animation-delay: 1s;
+            animation-delay: 0.6s;
         }
         .feature-box:nth-child(3) {
-            animation-delay: 1.5s;
-        }
-        .feature-box:hover {
-            transform: scale(1.05);
+            animation-delay: 0.9s;
         }
         .feature-box h3 {
             color: #00aaff;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-size: 22px;
-            font-weight: 600;
+            font-weight: 500;
         }
         .feature-box p {
             color: #ccc;
-            font-size: 16px;
-        }
-
-        /* Community Section */
-        .community-section {
-            background: rgba(30, 30, 30, 0.9);
-            padding: 60px 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(8px);
-            margin-top: 80px;
-            animation: fadeIn 3s ease-in-out;
-        }
-        .community-section h2 {
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
-        .community-section p {
-            color: #ddd;
-            font-size: 18px;
-            margin-bottom: 30px;
-        }
-        .community-section .cta-button {
-            background: linear-gradient(90deg, #FF4500, #FF6347);
-            text-decoration: none;
-            margin-top: 10px;
+            font-size: 14px;
+            line-height: 1.5;
         }
 
         /* Footer Section */
@@ -152,7 +121,7 @@
             bottom: 0;
             width: 100%;
             padding: 20px 0;
-            background: rgba(26, 26, 26, 0.9);
+            background: rgba(40, 40, 40, 0.8);
             text-align: center;
             color: #aaa;
             font-size: 14px;
@@ -178,27 +147,27 @@
 </head>
 <body>
 
-    <!-- Hero Section with Background Image -->
+    <!-- Hero Section -->
     <section class="hero">
-        <h1>Welcome to ShadowBox</h1>
-        <h2>Your Files Stay Hidden and Secure</h2>
-        <p>Advanced encryption and privacy tools for your sensitive files. Protect your data from prying eyes, and manage your files with ease.</p>
+        <h1>ShadowBox</h1>
+        <h2>Secure Your Files with Ease</h2>
+        <p>Protect your sensitive data with industry-leading encryption. Simple, secure, and reliable.</p>
         <a href="/signup" class="cta-button">Get Started</a>
     </section>
 
-    <!-- Features Section with Animation -->
+    <!-- Features Section -->
     <div class="features">
         <div class="feature-box">
-            <h3>Secure Encryption</h3>
-            <p>Keep your files private with top-of-the-line end-to-end encryption.</p>
+            <h3>Top-notch Security</h3>
+            <p>End-to-end encryption keeps your files safe from prying eyes.</p>
         </div>
         <div class="feature-box">
-            <h3>Cross-Platform</h3>
-            <p>Access your files from any device with secure login.</p>
+            <h3>Seamless Sync</h3>
+            <p>Access and manage your files across all devices effortlessly.</p>
         </div>
         <div class="feature-box">
-            <h3>Easy File Management</h3>
-            <p>Store, organize, and manage your files effortlessly.</p>
+            <h3>Simple Interface</h3>
+            <p>Easy-to-use interface for managing your files without complications.</p>
         </div>
     </div>
 

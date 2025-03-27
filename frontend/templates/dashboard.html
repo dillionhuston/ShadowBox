@@ -1,282 +1,232 @@
-<!-- dashboard.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>ShadowBox Dashboard</title>
     <style>
-        /* Reset some default styles */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+        /* Global Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #121212; /* Dark background */
-            color: #E0E0E0; /* Light text */
+            font-family: 'Poppins', sans-serif;
+            background: #121212;
+            color: #fff;
             display: flex;
+            flex-direction: column;
             height: 100vh;
-            overflow: hidden;
-            animation: fadeIn 3s ease-in-out; /* Fade-in animation */
         }
 
-        /* Sidebar styles */
+        /* Sidebar */
         .sidebar {
             width: 250px;
-            background-color: #1C1C1C; /* Dark sidebar */
-            color: #E0E0E0;
+            background: #1f1f1f;
             padding: 20px;
-            position: fixed;
             height: 100%;
-            top: 0;
-            left: 0;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
-
         .sidebar h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #FFD700; /* Golden text */
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sidebar ul li {
-            margin: 20px 0;
-        }
-
-        .sidebar ul li a {
-            color: #E0E0E0;
-            text-decoration: none;
-            font-size: 18px;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-
-        .sidebar ul li a:hover {
-            background-color: #3498db; /* Blue on hover */
-            color: white;
-        }
-
-        /* Main content area */
-        .content {
-            margin-left: 250px;
-            padding: 30px;
-            width: 100%;
-            overflow-y: auto;
-            background-color: #181818; /* Dark background for content */
-        }
-
-        /* Header section */
-        header {
+            color: #00aaff;
+            font-size: 24px;
             margin-bottom: 40px;
         }
+        .sidebar a {
+            color: #bbb;
+            font-size: 18px;
+            text-decoration: none;
+            margin: 15px 0;
+            display: block;
+            transition: color 0.3s;
+        }
+        .sidebar a:hover {
+            color: #00aaff;
+        }
 
-        header h1 {
+        /* Dashboard Content */
+        .content {
+            flex-grow: 1;
+            padding: 30px;
+            background: #181818;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .dashboard-header h1 {
+            color: #00aaff;
             font-size: 32px;
-            color: #FFD700; /* Golden header */
             font-weight: 600;
-            animation: fadeInUp 1s ease-in-out; /* Animation for header */
+        }
+        .dashboard-header .cta-button {
+            padding: 12px 24px;
+            background: #00aaff;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(0, 170, 255, 0.6);
+            transition: 0.3s ease;
+        }
+        .dashboard-header .cta-button:hover {
+            background: #0099cc;
+            box-shadow: 0 6px 20px rgba(0, 170, 255, 0.8);
         }
 
         /* Stats Section */
         .stats {
             display: flex;
-            gap: 20px;
+            gap: 30px;
             margin-bottom: 40px;
         }
-
-        .card {
-            background-color: #2C2C2C; /* Dark cards */
-            padding: 20px;
+        .stat-box {
+            background: rgba(40, 40, 40, 0.9);
+            padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            width: 30%;
             text-align: center;
-            flex: 1;
-            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
         }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card h3 {
-            font-size: 18px;
-            margin-bottom: 10px;
-            color: #3498db; /* Blue for card headers */
-            font-weight: 500;
-        }
-
-        .card p {
-            font-size: 28px;
-            color: #E0E0E0; /* Light text for values */
-            font-weight: bold;
-        }
-
-        /* Activities section */
-        .activities {
-            margin-top: 30px;
-        }
-
-        .activities h2 {
-            font-size: 24px;
-            color: #FFD700; /* Golden title */
+        .stat-box h3 {
+            color: #00aaff;
+            margin-bottom: 20px;
+            font-size: 22px;
             font-weight: 600;
-            margin-bottom: 20px;
         }
-
-        .activities ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .activities ul li {
-            background-color: #2C2C2C; /* Dark list items */
-            padding: 15px;
-            border-radius: 8px;
-            margin: 10px 0;
+        .stat-box p {
+            color: #bbb;
             font-size: 18px;
-            transition: background-color 0.3s ease;
         }
 
-        .activities ul li:hover {
-            background-color: #3498db; /* Blue on hover */
-            color: white;
-        }
-
-        /* Community section */
-        .community-section {
-            margin-top: 40px;
-            padding: 20px;
-            background-color: #333;
+        /* File List Section */
+        .file-list {
+            margin-top: 20px;
             border-radius: 10px;
-            animation: fadeInUp 1.5s ease-in-out; /* Fade-in effect for community section */
+            overflow: hidden;
+            background: #1f1f1f;
         }
-
-        .community-section h2 {
-            font-size: 28px;
-            margin-bottom: 20px;
-            color: #FFD700;
-        }
-
-        .community-section p {
-            color: #ddd;
-            font-size: 18px;
-            margin-bottom: 30px;
-        }
-
-        .community-section .cta-button {
-            background: linear-gradient(90deg, #FF4500, #FF6347); /* Gradient button */
-            color: #fff;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 16px;
-            display: inline-block;
-            transition: 0.3s;
-        }
-
-        .community-section .cta-button:hover {
-            background: linear-gradient(90deg, #FF6347, #FF4500);
-        }
-
-        /* Footer Section */
-        footer {
-            position: absolute;
-            bottom: 0;
+        .file-list table {
             width: 100%;
+            border-collapse: collapse;
+        }
+        .file-list th, .file-list td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        .file-list th {
+            background: #00aaff;
+            color: #fff;
+        }
+        .file-list tr:nth-child(even) {
+            background: rgba(40, 40, 40, 0.9);
+        }
+        .file-list tr:hover {
+            background: rgba(40, 40, 40, 1);
+        }
+
+        /* Footer */
+        footer {
+            background: #1f1f1f;
             padding: 20px 0;
-            background: rgba(26, 26, 26, 0.9);
             text-align: center;
             color: #aaa;
             font-size: 14px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
         }
-
         footer a {
             color: #00aaff;
             text-decoration: none;
         }
-
         footer a:hover {
             text-decoration: underline;
         }
-
-        /* Animation */
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes fadeInUp {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
     </style>
 </head>
 <body>
 
-    <!-- Sidebar -->
     <div class="sidebar">
-        <h2>Dashboard</h2>
-        <ul>
-            <li><a href="/dashboard">Home</a></li>
-            <li><a href="/upload">Upload</a></li>
-            <li><a href="/logout">Logout</a></li>
-        </ul>
+        <h2>ShadowBox</h2>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/files">My Files</a>
+        <a href="/settings">Settings</a>
+        <a href="/logout">Logout</a>
     </div>
 
-    <!-- Main content -->
     <div class="content">
-        <header>
-            <h1>Welcome, {{ session['user'] }}!</h1>
-        </header>
+        <div class="dashboard-header">
+            <h1>Your Dashboard</h1>
+            <a href="/upload" class="cta-button">Upload New File</a>
+        </div>
 
-        <!-- Stats section -->
-        <section class="stats">
-            <div class="card">
-                <h3>Total Users</h3>
-                <p>345</p>
+        <!-- Stats Section -->
+        <div class="stats">
+            <div class="stat-box">
+                <h3>Total Files</h3>
+                <p>20</p>
             </div>
-            <div class="card">
-                <h3>New Signups</h3>
-                <p>12</p>
+            <div class="stat-box">
+                <h3>Total Storage</h3>
+                <p>15 GB</p>
             </div>
-            <div class="card">
-                <h3>Pending Requests</h3>
-                <p>5</p>
+            <div class="stat-box">
+                <h3>Last Backup</h3>
+                <p>2 Days Ago</p>
             </div>
-        </section>
+        </div>
 
-        <!-- Community Section -->
-        <section class="community-section">
-            <h2>Join the Community</h2>
-            <p>Become part of our growing community of users and stay updated with the latest features and discussions!</p>
-            <a href="#" class="cta-button">Join Now</a>
-        </section>
-
-        <!-- Recent activity section -->
-        <section class="activities">
-            <h2>Recent Activity</h2>
-            <ul>
-                <li>User "johndoe" signed up</li>
-                <li>User "janedoe" uploaded a file</li>
-                <li>User "mike" changed their password</li>
-            </ul>
-        </section>
+        <!-- File List Section -->
+        <div class="file-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Size</th>
+                        <th>Last Modified</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Document1.pdf</td>
+                        <td>3.5 MB</td>
+                        <td>2025-03-25</td>
+                        <td><a href="/download" style="color: #00aaff;">Download</a></td>
+                    </tr>
+                    <tr>
+                        <td>Image1.png</td>
+                        <td>2.1 MB</td>
+                        <td>2025-03-22</td>
+                        <td><a href="/download" style="color: #00aaff;">Download</a></td>
+                    </tr>
+                    <tr>
+                        <td>Report.xlsx</td>
+                        <td>5.8 MB</td>
+                        <td>2025-03-20</td>
+                        <td><a href="/download" style="color: #00aaff;">Download</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <!-- Footer Section -->
     <footer>
-        <p>&copy; 2025 Dashboard Inc. <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        <p>&copy; 2025 ShadowBox | <a href="/privacy-policy">Privacy Policy</a></p>
     </footer>
 
 </body>
