@@ -1,7 +1,9 @@
 import sqlite3
 from io import BytesIO
 from flask import Flask, render_template, request, send_file
+from backend.crypto import cryptomanager 
 
+cryptomanager = cryptomanager()
 
 class storage():
     def __init__(self):
@@ -19,10 +21,20 @@ class storage():
         ''')
         self.conn.commit()
 
+
     def get_file_binary(self, file):
-        
         data = file.read()  
+        cryptomanager.encrypt(data, e_path='data.bin' )
         print(f'File {file.filename} loaded, size: {len(data)} bytes')
+        
         return data
+    
+   
+    
+
+
+        
+      
+
 
          

@@ -2,11 +2,13 @@ from flask import Flask, render_template, request, redirect
 from backend.db import db_operations
 from backend.auth import auth 
 from backend.storage import storage
+from backend.crypto import cryptomanager
 
 app = Flask(__name__, template_folder='frontend/templates')
 
 backend = db_operations()
 backend_auth = auth()
+cryptomanager = cryptomanager()
 
 
 @app.route('/')
@@ -70,4 +72,5 @@ def dashboard():
      return render_template('dashboard.html')
 
 if __name__ == '__main__':
+    
     app.run(debug=True)
