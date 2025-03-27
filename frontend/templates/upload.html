@@ -71,37 +71,86 @@
     </style>
 </head>
 <body>
-    <div class="upload-container">
-        <h2>Upload Your File</h2>
-        <form action="/upload" method="POST" enctype="multipart/form-data">
-            <div class="drag-area" onclick="document.getElementById('fileInput').click()">
-                <p>Drag & Drop your file here or Click to Select</p>
-                <input type="file" id="fileInput" class="file-input" name="file" required>
-            </div>
-            <button type="submit">Upload</button>
-        </form>
-    </div>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <div class="drag-area" id="dragArea">
+            <p>Drag & Drop your file here or Click to Select</p>
+            <input type="file" id="fileInput" name="file" required>
+        </div>
+        <button type="submit">Upload</button>
+    </form>
 
     <script>
         const fileInput = document.getElementById('fileInput');
-        const dragArea = document.querySelector('.drag-area');
-        
-        dragArea.addEventListener('dragover', (event) => {
-            event.preventDefault();
-            dragArea.style.background = 'rgba(0, 170, 255, 0.2)';
-        });
-        
-        dragArea.addEventListener('dragleave', () => {
-            dragArea.style.background = 'transparent';
-        });
-        
-        dragArea.addEventListener('drop', (event) => {
-            event.preventDefault();
-            dragArea.style.background = 'transparent';
-            fileInput.files = event.dataTransfer.files;
-        });
-    </script>
-</body>
+const dragArea = document.getElementById('dragArea');
+
+dragArea.addEventListener('click', () => {
+    fileInput.click();
+});
+
+dragArea.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    dragArea.style.background = 'rgba(0, 170, 255, 0.2)';
+});
+
+dragArea.addEventListener('dragleave', () => {
+    dragArea.style.background = 'transparent';
+});
+
+dragArea.addEventListener('drop', (event) => {
+    event.preventDefault();
+    dragArea.style.background = 'transparent';
+
+    if (event.dataTransfer.files.length > 0) {
+        const file = event.dataTransfer.files[0];
+
+        // Manually set file input for submission
+        let dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        fileInput.files = dataTransfer.files;
+
+        console.log("File dropped:", file.name);
+    }
+});
+
+document.getElementById("uploadForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent default submission
+
+    const fileInput = document.getElementById("fileInput");
+    const formData = new FormData();
+
+    if (!fileInput.files.length) {
+        alert("Please select a file before uploading.");
+        return;
+    }
+
+    formData.append("file", fileInput.files[0]);
+
+    console.log("Sending file:", fileInput.files[0].name); // Debugging
+
+    fetch("/upload", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log("Server Response:", data);
+        alert("File uploaded successfully!");
+    })
+    .catch(error => {
+        console.error("Error uploading file:", error);
+        alert("Upload failed.");
+    });
+});
+
+
+
+
+
+// Debugging file selection
+fileInput.addEventListener("change", () => {
+    if (fileInput.files.length > 0) {
+        console.log("File selected:", fileInput.files[0].name);
+    }
+});
+</script>
 </html>
-
-

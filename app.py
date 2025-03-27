@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, redirect
 from backend.db import db_operations
 from backend.auth import auth 
+from backend.storage import storage
 
 app = Flask(__name__, template_folder='frontend/templates')
 
 backend = db_operations()
 backend_auth = auth()
+
 
 @app.route('/')
 def index():
@@ -28,7 +30,6 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-
         if username and password:
             user = backend.get_user(username)
             return user
@@ -38,9 +39,31 @@ def login():
                     print("User logged in")
     return render_template("dashboard.html")
 
-@app.route('/upload')
+storage_instance = storage()
+
+@app.route('/upload', methods=['GET', 'POST'])
 def upload():
-    return render_template('upload.html')
+    if request.method == 'GET':
+        return render_template('upload.html')
+
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return "No file uploaded", 400  
+
+        file = request.files['file']
+
+        if file.filename == '':
+            return "No selected file", 400  
+
+        try:
+            file_data = storage_instance.get_file_binary(file)
+
+            return "File uploaded successfully!", 200  
+        except Exception as e:
+            return f"Error processing file: {str(e)}", 500
+
+
+   
 
 @app.route('/dashboard')
 def dashboard():
