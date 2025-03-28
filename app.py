@@ -58,11 +58,12 @@ def upload():
             return "No selected file", 400  
 
         try:
-            file_data = storage_instance.get_file_binary(file)
+            file_data = storage_instance.get_file_binary(file) 
 
             return "File uploaded successfully!", 200  
         except Exception as e:
             return f"Error processing file: {str(e)}", 500
+    return render_template('dashboard.html')
 
 
    
