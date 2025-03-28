@@ -2,8 +2,8 @@ from cryptography.fernet import Fernet
 
 class cryptomanager:
     def __init__(self):
-        self.data_path = 'files.db'
-        self.key_path = 'key.txt'
+        self.data_path = '/data/files.db'
+        self.key_path = '/data/key.txt'
         self.key = self.load_or_generate_key()
         self.fernet = Fernet(self.key)
 
