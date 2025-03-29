@@ -1,6 +1,7 @@
 # 📦 ShadowBox – Secure & Private Cloud Storage
 
 ## 🚀 Overview
+THIS IS A PROTOTYPE. DONT USE FOR SENSITIVE DATA
 ShadowBox is a **privacy-first, decentralized cloud storage** platform that lets users securely store and share files without relying on big tech companies. Built with **end-to-end encryption, peer-to-peer (P2P) networking, and advanced access control**, this project ensures **maximum security and ownership** over your data.
 
 ## 🎯 Features (MVP)
