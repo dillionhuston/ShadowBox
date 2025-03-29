@@ -39,9 +39,3 @@ class storage:
         except sqlite3.IntegrityError:
             print(f"File {filename} already exists in the database.")
 
-# Example usage
-if __name__ == "__main__":
-    storage = storage()
-    with open("sample.txt", "rb") as f:
-        raw_data, encrypted_data = storage.get_file_binary(f)
-        storage.save_file_to_db("sample.txt", encrypted_data)
