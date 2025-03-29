@@ -11,8 +11,8 @@ class cryptomanager:
         """Load an existing key or generate a new one."""
         try:
             with open(self.key_path, 'rb') as key_file:
-                key = key_file.read().strip()  # Ensure no extra spaces or newlines
-                if len(key) != 44:  # Fernet keys are always 44 characters long
+                key = key_file.read().strip()  
+                if len(key) != 44:  
                     raise ValueError("Invalid key length. Generating a new key.")
                 print(f'Loaded key: {key}')
         except (FileNotFoundError, ValueError):
@@ -45,10 +45,4 @@ class cryptomanager:
         # need to implement function for extacting from databse
 
 
-# Example usage
-if __name__ == "__main__":
-    crypto = cryptomanager()
-    crypto.encrypt('plaintext.txt')  # Encrypt a sample text file
-    decrypted_data = crypto.decrypt()
-    if decrypted_data:
-        print("Decrypted content:", decrypted_data.decode())
+
