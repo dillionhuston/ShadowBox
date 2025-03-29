@@ -44,10 +44,10 @@ We’re actively looking for **developers, security experts, and UI/UX designers
 
 ---
 ### 📌 Roadmap
-✅ **Phase 1:** Basic encryption & file upload,
-🔲 **Phase 2:** Decentralized storage integration,
-🔲 **Phase 3:** Real-time file sharing & collaboration,
-🔲 **Phase 4:** Business plan & monetization
+-✅ **Phase 1:** Basic encryption & file upload, (Complete MVPS'S)
+-🔲 **Phase 2:** Decentralized storage integration,
+-🔲 **Phase 3:** Real-time file sharing & collaboration,
+-🔲 **Phase 4:** Business plan & monetization
 
 ---
 ### 📜 License
