@@ -2,7 +2,7 @@ from cryptography.fernet import Fernet
 
 class cryptomanager:
     def __init__(self):
-        self.data_path = 'backend/data.db'
+        self.data_path = 'files.db'
         self.key_path = 'key.txt'
         self.key = self.load_or_generate_key()
         self.fernet = Fernet(self.key)
@@ -11,8 +11,8 @@ class cryptomanager:
     def load_or_generate_key(self):
         try:
             with open(self.key_path, 'rb') as key_file:
-                key = key_file.read().strip()  
-                if len(key) != 44: 
+                key = key_file.read().strip()  # Ensure no extra spaces or newlines
+                if len(key) != 44:  # Fernet keys are always 44 characters long
                     raise ValueError("Invalid key length. Generating a new key.")
                 print(f'Loaded key: {key}')
         except (FileNotFoundError, ValueError):
@@ -40,19 +40,10 @@ class cryptomanager:
     
        
         
-       
-         
-       
+    
 
     def decrypt(self):
         """Decrypt the stored encrypted data."""
         # need to implement function for extacting from databse
-        #this function just a placeholder for now
-        if self.encrypted_data is None:
-            print("No data to decrypt.")
-            return None
-        
-        decrypted_data = self.fernet.decrypt(self.encrypted_data)
-        print(f'Decrypted data: {decrypted_data}')
-        return decrypted_data
+
 
