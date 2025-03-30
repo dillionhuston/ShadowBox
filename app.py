@@ -1,5 +1,7 @@
-from flask import Flask, render_template, request, redirect
+
 import os 
+from flask import Flask, render_template, request, redirect, send_from_directory
+from datetime import datetime
 from werkzeug.utils import secure_filename
 from backend.db import db_operations
 from backend.crypto import cryptomanager
@@ -7,6 +9,8 @@ from backend.auth import auth
 from backend.storage import storage
 
 app = Flask(__name__, template_folder='frontend/templates')
+encrypted = 'backend/upload/encrypted'
+app.config['UPLOAD_FOLDER'] = encrypted
 
 #FOLDERS 
 allowed_extension = {'.doc', 'pdf', '.py', '.zip', '.7z', '.png'} #this is for an example
@@ -17,7 +21,7 @@ backend_auth = auth()
 cryptomanager = cryptomanager()
 storage = storage()
 
-
+# for latr implementation 
 def allowed_file(filename):
      return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extension
 
@@ -35,6 +39,7 @@ def signup():
         password = request.form.get('password')
         email = request.form.get('email')
         if username and password and email:
+            print(f"password {password}")
             hashed_password = auth.hash_password(password)
             backend.adduser(username, hashed_password, email)  
             return redirect('/login') 
@@ -53,7 +58,27 @@ def login():
         if user and passw:
                 # session variable needed
                     print("User logged in")
-    return render_template("dashboard.html")
+    return render_template("login.html")
+
+@app.route('/dashboard')
+def dashboard():
+    files = os.listdir(app.config['UPLOAD_FOLDER'])
+    file_data = []
+    for file in files:
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file)
+        if os.path.isfile(file_path):
+            #get in kb
+            file_size = round(os.path.getsize(file_path) / 1024, 2)
+            last_modified = datetime.utcfromtimestamp(os.path.getmtime(file_path)).strftime('%Y-%m-%d %H:%M:%S')
+            
+            file_data.append({
+                'name': file,
+                'size': file_size,
+                'last_modified': last_modified
+            })
+
+    return render_template('dashboard.html', files=file_data)
+
 
 #UPLOAD 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -61,18 +86,17 @@ def upload():
     if request.method == 'GET':
         return render_template('upload.html')
     
-    if request.method and 'file' not in request.files == 'POST':
-        return "No file uploaded", 400  
-    file = request.files['file'] 
-    if file: 
-            storage.save_file(file)
-            return "File uploaded successfully!", 200
-    
-    #return to dash
+    if request.method == 'POST':
+         if 'file' not in request.files:
+              return 'No file attached', 400
+         file = request.files['file']
+         if file:
+              storage.save_file(file)
+              return redirect('dashboard.html')
+      
 
 
-#DASHBOARD 
-@app.route('/dashboard')
-def dashboard():
-     return render_template('dashboard.html')
+@app.route('/download/<filename>')
+def download_files(filename):
+     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 

@@ -67,28 +67,6 @@
             font-size: 32px;
             font-weight: 600;
         }
-        .stats-container {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background: linear-gradient(135deg, #00aaff, #004466);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 170, 255, 0.5);
-            margin-bottom: 40px;
-        }
-        .stat-box {
-            text-align: center;
-            color: #fff;
-            font-weight: 600;
-        }
-        .stat-box h3 {
-            font-size: 22px;
-            margin-bottom: 10px;
-        }
-        .stat-box p {
-            font-size: 18px;
-        }
         .file-list {
             border-radius: 10px;
             overflow: hidden;
@@ -141,20 +119,6 @@
         <a href="/logout">Logout</a>
     </div>
     <div class="content">
-        <div class="stats-container">
-            <div class="stat-box">
-                <h3>Total Files</h3>
-                <p>20</p>
-            </div>
-            <div class="stat-box">
-                <h3>Total Storage</h3>
-                <p>15 GB</p>
-            </div>
-            <div class="stat-box">
-                <h3>Last Backup</h3>
-                <p>2 Days Ago</p>
-            </div>
-        </div>
         <div class="dashboard-header">
             <h1>Your Dashboard</h1>
             <a href="/upload" class="cta-button">Upload New File</a>
@@ -164,30 +128,20 @@
                 <thead>
                     <tr>
                         <th>File Name</th>
-                        <th>Size</th>
+                        <th>Size (KB)</th>
                         <th>Last Modified</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for file in files %}
                     <tr>
-                        <td>Document1.pdf</td>
-                        <td>3.5 MB</td>
-                        <td>2025-03-25</td>
-                        <td><a href="/download" style="color: #00aaff;">Download</a></td>
+                        <td>{{ file.name }}</td>
+                        <td>{{ file.size | round(2) }} KB</td> <!-- Display size in KB -->
+                        <td>{{ file.last_modified }}</td>
+                        <td><a href="{{ url_for('download_files', filename=file.name) }}" style="color: #00aaff;">Download</a></td>
                     </tr>
-                    <tr>
-                        <td>Image1.png</td>
-                        <td>2.1 MB</td>
-                        <td>2025-03-22</td>
-                        <td><a href="/download" style="color: #00aaff;">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td>Report.xlsx</td>
-                        <td>5.8 MB</td>
-                        <td>2025-03-20</td>
-                        <td><a href="/download" style="color: #00aaff;">Download</a></td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
