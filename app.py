@@ -1,14 +1,16 @@
 from flask import Flask, render_template, request, redirect
 from backend.db import db_operations
+from backend.crypto import cryptomanager
 from backend.auth import auth 
 from backend.storage import storage
-from backend.crypto import cryptomanager
+
 
 app = Flask(__name__, template_folder='frontend/templates')
 
 backend = db_operations()
 backend_auth = auth()
 cryptomanager = cryptomanager()
+storage = storage()
 
 
 @app.route('/')
@@ -41,7 +43,6 @@ def login():
                     print("User logged in")
     return render_template("dashboard.html")
 
-storage_instance = storage()
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -54,11 +55,12 @@ def upload():
 
         file = request.files['file']
 
+
         if file.filename == '':
             return "No selected file", 400  
 
         try:
-            file_data = storage_instance.get_file_binary(file) 
+            file_data = storage.get_file_binary(file) 
 
             return "File uploaded successfully!", 200  
         except Exception as e:

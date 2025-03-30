@@ -21,8 +21,7 @@ class db_operations:
         try:
             self.c.execute(
                 'INSERT INTO accounts (username, email, password) VALUES (?, ?, ?)', 
-                (username, email, hashed_password)
-            )                                       
+                (username, email, hashed_password))                               
             self.conn.commit()
             print("User added successfully!")
         except sqlite3.IntegrityError:
@@ -39,6 +38,9 @@ class db_operations:
                 'password': user[3]
             }
         return None 
+    
+
+
 
     def __del__(self):
         self.conn.close()
