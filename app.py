@@ -1,22 +1,33 @@
 from flask import Flask, render_template, request, redirect
+import os 
+from werkzeug.utils import secure_filename
 from backend.db import db_operations
 from backend.crypto import cryptomanager
 from backend.auth import auth 
 from backend.storage import storage
 
-
 app = Flask(__name__, template_folder='frontend/templates')
 
+#FOLDERS 
+allowed_extension = {'.doc', 'pdf', '.py', '.zip', '.7z', '.png'} #this is for an example
+
+# CLASS OBJECTS
 backend = db_operations()
 backend_auth = auth()
 cryptomanager = cryptomanager()
 storage = storage()
 
 
+def allowed_file(filename):
+     return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extension
+
+# INDEX ROUTE
 @app.route('/')
 def index():
     return render_template('index.html')
 
+
+# SIGN UP
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -29,6 +40,7 @@ def signup():
             return redirect('/login') 
     return render_template('signup.html')
 
+# LOGIN 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -43,37 +55,24 @@ def login():
                     print("User logged in")
     return render_template("dashboard.html")
 
-
+#UPLOAD 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'GET':
         return render_template('upload.html')
-
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            return "No file uploaded", 400  
-
-        file = request.files['file']
-
-
-        if file.filename == '':
-            return "No selected file", 400  
-
-        try:
-            file_data = storage.get_file_binary(file) 
-
-            return "File uploaded successfully!", 200  
-        except Exception as e:
-            return f"Error processing file: {str(e)}", 500
-    return render_template('dashboard.html')
+    
+    if request.method and 'file' not in request.files == 'POST':
+        return "No file uploaded", 400  
+    file = request.files['file'] 
+    if file: 
+            storage.save_file(file)
+            return "File uploaded successfully!", 200
+    
+    #return to dash
 
 
-   
-
+#DASHBOARD 
 @app.route('/dashboard')
 def dashboard():
      return render_template('dashboard.html')
 
-if __name__ == '__main__':
-    
-    app.run(debug=True)
