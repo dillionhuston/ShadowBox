@@ -11,12 +11,12 @@ ShadowBox is a **privacy-first, decentralized cloud storage** platform that lets
 
 ## 🔧 Tech Stack
 - **Backend:** Python (FastAPI / Flask for API)
-- **Storage:** IPFS / S3-Compatible Cloud
+- **Storage:** IPFS / S3-Compatible Cloud(SOON)
 - **Frontend:** HTML, CSS, JavaScript (Flask/Jinja for templating)
-- **Database:** PostgreSQL / SQLite
-- **Encryption:** AES-256 & RSA (end-to-end security)
-- **Networking:** WebRTC / P2P protocols
-- **Deployment:** Docker + Kubernetes
+- **Database:** SQLite
+- **Encryption:** AES-256
+- **Networking:** WebRTC / P2P protocols(SOON)
+- **Deployment:** Docker + Kubernetes(SOON)
 
 ## 🛠 Installation & Setup
 ```bash

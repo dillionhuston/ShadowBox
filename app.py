@@ -68,9 +68,55 @@ def upload():
 
    
 
+   
+
+
+#UPLOAD 
+@app.route('/upload', methods=['GET', 'POST'])
+def upload(uploaded = False):
+    if request.method == 'GET':
+         return render_template ('upload.html')
+      
+    if 'file' not in request.files:
+        return 'No file attached', 400
+         
+    file = request.files['file']
+         
+    if file:
+     storage.save_file(file)
+     return redirect(url_for('dashboard'))
+    
+
+
 @app.route('/dashboard')
 def dashboard():
+<<<<<<< Updated upstream
      return render_template('dashboard.html')
+=======
+    files = os.listdir(app.config['UPLOAD_FOLDER'])
+    file_data = []
+    for file in files:
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file)
+        if os.path.isfile(file_path):
+            #get in kb
+            file_size = round(os.path.getsize(file_path) / 1024, 2)
+            last_modified = datetime.utcfromtimestamp(os.path.getmtime(file_path)).strftime('%Y-%m-%d %H:%M:%S')
+            
+            file_data.append({
+                'name': file,
+                'size': file_size,
+                'last_modified': last_modified
+            })
+
+    return render_template('dashboard.html')
+         
+         
+        
+      
+@app.route('/download/<filename>')
+def download_files(filename):
+     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+>>>>>>> Stashed changes
 
 if __name__ == '__main__':
     

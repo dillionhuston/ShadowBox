@@ -44,7 +44,6 @@
             border-radius: 6px;
             transition: background 0.3s, color 0.3s;
         }
-
         .sidebar a:hover {
             background: #00aaff;
             color: #fff;
@@ -113,24 +112,56 @@
         .file-list tr:hover {
             background: rgba(40, 40, 40, 1);
         }
-        footer {
-            background: #1f1f1f;
-            padding: 20px 0;
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #222;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 170, 255, 0.5);
             text-align: center;
-            color: #aaa;
-            font-size: 14px;
-            position: absolute;
-            bottom: 0;
+        }
+        .modal input {
             width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
         }
-        footer a {
-            color: #00aaff;
-            text-decoration: none;
+        .modal button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #00aaff;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
-        footer a:hover {
-            text-decoration: underline;
+        .modal button:hover {
+            background: #0088cc;
         }
     </style>
+    <script>
+        function showAESPrompt(event, url) {
+            event.preventDefault();
+            const modal = document.getElementById('aes-modal');
+            const downloadLink = document.getElementById('download-link');
+            modal.style.display = 'block';
+            downloadLink.onclick = function() {
+                const key = document.getElementById('aes-key').value;
+                if (key) {
+                    window.location.href = url + '?aes_key=' + encodeURIComponent(key);
+                    modal.style.display = 'none';
+                }
+            };
+        }
+    </script>
 </head>
 <body>
     <div class="sidebar">
@@ -171,6 +202,7 @@
                 </thead>
                 <tbody>
                     <tr>
+<<<<<<< Updated upstream
                         <td>Document1.pdf</td>
                         <td>3.5 MB</td>
                         <td>2025-03-25</td>
@@ -188,12 +220,63 @@
                         <td>2025-03-20</td>
                         <td><a href="/download" style="color: #00aaff;">Download</a></td>
                     </tr>
+=======
+                        <td>{{ file.name }}</td>
+                        <td>{{ file.size | round(2) }} KB</td>
+                        <td>{{ file.last_modified }}</td>
+                        <td>{{ file.last_modified }}</td>
+                        <td>
+                            <a href="#" style="color: #00aaff;" onclick="showAESPrompt(event, '{{ url_for('download_files', filename=file.name) }}')">Download</a>
+                        </td>
+                    {% endfor %}
+>>>>>>> Stashed changes
                 </tbody>
             </table>
         </div>
     </div>
-    <footer>
-        <p>&copy; 2025 ShadowBox | <a href="/privacy-policy">Privacy Policy</a></p>
-    </footer>
+    <div id="aes-modal" class="modal">
+        <h2>Enter AES Key</h2>
+        <input type="text" id="aes-key" placeholder="Enter AES Key" required>
+        <button onclick="submitAESKey()">Submit</button>
+    </div>
+    
+    <script>
+        let downloadUrl = '';
+    
+        function showAESPrompt(event, url) {
+            event.preventDefault();
+            downloadUrl = url; // Store the download URL
+            document.getElementById('aes-modal').style.display = 'block';
+        }
+    
+        function submitAESKey() {
+            const key = document.getElementById('aes-key').value;
+    
+            if (key.trim() !== '') {
+                // Create a form and submit it as POST
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = downloadUrl;  // URL to send the POST request to
+                
+                // Create an input field for AES key
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'aes_key';
+                input.value = key;
+                
+                // Append input to form
+                form.appendChild(input);
+                document.body.appendChild(form);
+                
+                // Submit the form
+                form.submit();
+                
+                // Hide modal
+                document.getElementById('aes-modal').style.display = 'none';
+            } else {
+                alert('Please enter an AES key.');
+            }
+        }
+    </script>
 </body>
 </html>

@@ -1,0 +1,5 @@
+flask 3.1.0
+fernet 
+hashlib
+pycryptodom
+sqlalchemy
