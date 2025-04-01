@@ -12,10 +12,10 @@ app = Flask(__name__, template_folder='frontend/templates')
 encrypted = 'backend/upload/encrypted'
 app.config['UPLOAD_FOLDER'] = encrypted
 
-#FOLDERS 
+########## FOLDERS ##########
 allowed_extension = {'.doc', 'pdf', '.py', '.zip', '.7z', '.png'} #this is for an example
 
-# CLASS OBJECTS
+####### CLASS OBJECTS #########
 backend = db_operations()
 backend_auth = auth()
 cryptomanager = cryptomanager()
@@ -25,13 +25,13 @@ storage = storage()
 def allowed_file(filename):
      return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extension
 
-# INDEX ROUTE
+######### INDEX ROUTE ##############
 @app.route('/')
 def index():
     return render_template('index.html')
 
 
-# SIGN UP
+######### SIGN UP #############
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -45,7 +45,7 @@ def signup():
             return redirect('/login') 
     return render_template('signup.html')
 
-# LOGIN 
+# ######## LOGIN ########
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -76,10 +76,6 @@ def dashboard():
                 'size': file_size,
                 'last_modified': last_modified
             })
-
-    # Decrypt files
-  
-
     return render_template('dashboard.html', files=file_data)
 
 
@@ -87,19 +83,30 @@ def dashboard():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload(uploaded = False):
     if request.method == 'GET':
-         render_template ('upload.html')
+         return render_template('upload.html')
       
     if request.method == 'POST':
-         if 'file' not in request.files:
+        if 'file' not in request.files:
             return 'No file attached', 400
-         file = request.files['file']
-         if file:
-             return redirect("dashboard.html", 200)
-         
-         
-        
+        file = request.files['file']
+        if file:
+            storage.save_file(file)
+            return render_template("dashboard.html")
+            
       
-@app.route('/download/<filename>')
-def download_files(filename):
-     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+@app.route('/download/')
+def download_files():
+     aes_key = request.form['aesKey']
+     filename = request.form['filename']
 
+     file_path = os.path.join(encrypted, filename)
+     if not os.path.exists:
+          return "File not found", 404
+     cryptomanager.decrypt(file_path, aes_key)
+     
+     
+
+     
+
+
+   

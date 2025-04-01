@@ -42,5 +42,10 @@ class cryptomanager:
             return
 
 
-    def decrypt(self, filepath):
-        return
+    def decrypt(self, filepath, key):
+        with open(key, 'r'):
+           key = key.read().strip()
+           self.fernet = Fernet(key)
+           decrypted_data = self.fernet.decrypt(open(filepath, 'rb').read())
+        print(f"encrypted data = {decrypted_data}")
+        return decrypted_data
