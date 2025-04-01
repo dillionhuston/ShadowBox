@@ -1,6 +1,6 @@
 
 import os 
-from flask import Flask, render_template, request, redirect, send_from_directory
+from flask import Flask, render_template, request, redirect, send_from_directory, url_for
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from backend.db import db_operations
@@ -77,25 +77,28 @@ def dashboard():
                 'last_modified': last_modified
             })
 
+    # Decrypt files
+  
+
     return render_template('dashboard.html', files=file_data)
 
 
 #UPLOAD 
 @app.route('/upload', methods=['GET', 'POST'])
-def upload():
+def upload(uploaded = False):
     if request.method == 'GET':
-        return render_template('upload.html')
-    
+         render_template ('upload.html')
+      
     if request.method == 'POST':
          if 'file' not in request.files:
-              return 'No file attached', 400
+            return 'No file attached', 400
          file = request.files['file']
          if file:
-              storage.save_file(file)
-              return redirect('dashboard.html')
+             return redirect("dashboard.html", 200)
+         
+         
+        
       
-
-
 @app.route('/download/<filename>')
 def download_files(filename):
      return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
