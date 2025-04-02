@@ -1,0 +1,12 @@
+flask
+flask-sqlalchemy
+pycryptodome
+flask-login
+argon2-cffi
+flask-wtf
+flask-uploads
+bootstrap-flask
+jinja2
+loguru
+gunicorn
+docker

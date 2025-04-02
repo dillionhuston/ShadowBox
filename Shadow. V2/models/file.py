@@ -2,7 +2,7 @@
 #DATABASE
 
 from flask_login import *
-import sqlalchemy as sq
+import flask_sqlalchemy as sq
 
 class FileMetadata(sq.model):
     id = sq.Column(sq.Integer, primary_key=True)
