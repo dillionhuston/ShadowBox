@@ -1,20 +1,21 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-import config
-from routes import auth
-from models import *
+from config import Config
+from app.routes.auth import auth
+from app.routes import dashboard, file
 
- 
-from .models import db  
+app = Flask(__name__)
+app.config.from_object(Config)
 
-db = SQLAlchemy()
+db = SQLAlchemy(app)
 
-def create_app():
+#Register blueprints
+app.register_blueprint(auth)
+app
 
-    app = Flask(__name__)
-    app.config.from_object(config)
 
-    db.init_app(app)
+with app.app_context():
+    db.create_all()  
 
-    auth = auth(app)  
-    return app
+if __name__ == "__main__":
+    app.run(debug=True)
