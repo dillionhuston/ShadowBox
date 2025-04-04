@@ -2,12 +2,9 @@ from flask import Flask, Blueprint, render_template, request, redirect, url_for,
 from app.models.user import User
 
 # Define the Blueprint
-auth = Blueprint('auth', __name__)
+auth_bp = Blueprint('auth', __name__)
 
-# Define the app
-app = Flask(__name__, template_folder='templates')
-
-@auth.route('/signup', methods=['POST', 'GET'])
+@auth_bp.route('/signup', methods=['POST', 'GET'])
 def signup():
     if request.method == 'POST':
         username = request.form['username']
@@ -15,6 +12,7 @@ def signup():
         email = request.form['email']
 
         if not username or not password or not email:
+
             flash('All fields are required.')
             return redirect(url_for('auth.signup'))
         
@@ -29,7 +27,7 @@ def signup():
 
     return render_template('signup.html')
 
-@auth.route('/login', methods=['GET', 'POST'])
+@auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -44,7 +42,7 @@ def login():
             flash('Invalid username or password.')
     return render_template('login.html')
 
-@auth.route('/logout')
+@auth_bp.route('/logout')
 def logout():
     flash('You have been logged out.')
     return redirect(url_for('auth.login'))
