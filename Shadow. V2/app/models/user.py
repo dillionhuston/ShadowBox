@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from passlib.hash import pbkdf2_sha256
 from app.services.encryption import EncryptionService
+from uuid_utils import uuid4
 logger = logging.getLogger(__name__)
 
 db = SQLAlchemy()
@@ -20,13 +21,13 @@ class User(db.Model, UserMixin):
   
     @staticmethod
     def add_user(username, email, password):
-        """creates and adds a new user to the database with a hashed password and key derived from pass"""
+        """creates a new uuid for the user, generates hash for password and aes key"""
         hashed_password = User.hash_password(password)  
         key, salt = EncryptionService.generate_key(password)
         logger.info(f"Generated encryption key: {key}")
         new_user = User(username=username, email=email, password=hashed_password, key=key)
-       
-        # Add new user to the session and commit
+
+        # add new user 
         db.session.add(new_user)
         db.session.commit()
 

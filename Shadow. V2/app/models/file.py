@@ -1,16 +1,20 @@
 
 from app import Database
-from sqlalchemy import Column, Integer, ForeignKey, String
-from sqlalchemy.orm import relationship
+from flask_sqlalchemy import SQLAlchemy
 import logging
 
-class File(Database.db.Model):
+db = SQLAlchemy()
+from flask_sqlalchemy import SQLAlchemy
+class File(db.Modell):
     __tablename__ = "files"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    owner_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    file_path = Column(String(500), nullable=False)
-    file_name = Column(String(300), nullable=False)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    owner_id = db.Column(db.Integer)
+    file_path = db.Column(db.String(500), nullable=False)
+    file_name = db.Column(db.String(300), nullable=False)
 
-    # Relationship to User 
-    owner = relationship("User", back_populates="files")  
+
+    def add_file(file, filename, filepath, userid):
+        newfile = File(file_path=filepath, file_name=filename, userid=id )
+        db.session.commit(newfile)
+        return

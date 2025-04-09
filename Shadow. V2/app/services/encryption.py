@@ -8,7 +8,7 @@ from os import O_RANDOM
 
 class EncryptionService():
     """generate key based on user account password"""
-    def generate_key(password: str):
+    def generate_key(self,password: str):
         salt = get_random_bytes(16)  
         iterations = 100_000       
         key = pbkdf2_hmac(hash_name='sha256', password=password.encode(), salt=salt, iterations=iterations, dklen=32)
@@ -16,7 +16,8 @@ class EncryptionService():
     
     @staticmethod
     def encrypt(file_data):
-       
+        
+        cipher = AES.new(key,)
         
         return hash
 
