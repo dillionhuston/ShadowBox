@@ -1,9 +1,9 @@
-from flask import Flask, Response
+from flask import Flask, Response, render_template
 from flask_sqlalchemy import SQLAlchemy
 from config import Config
 from app.routes.auth import auth_bp
 from app.routes.file import file_bp
-from app.models.user import db, User
+from app.models.user import db
 
 
 app = Flask(__name__, template_folder='app/templates')
@@ -25,6 +25,10 @@ app.register_blueprint(file_bp)
 def apply_csp(response: Response):
     response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self'; style-src 'self';"
     return response
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

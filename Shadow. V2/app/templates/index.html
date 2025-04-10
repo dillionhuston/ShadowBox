@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ShadowBox - Secure Your Files</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #0f0f0f, #1a1a1a);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .hero {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 15px;
+      padding: 60px 30px;
+      box-shadow: 0 10px 30px rgba(0, 255, 255, 0.1);
+      max-width: 800px;
+      width: 100%;
+      margin-top: 50px;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      color: #00caff;
+      margin-bottom: 20px;
+    }
+
+    .hero h2 {
+      font-weight: 400;
+      font-size: 1.4rem;
+      color: #eee;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 1rem;
+      color: #bbb;
+      margin-bottom: 30px;
+    }
+
+    .cta-button {
+      padding: 12px 24px;
+      background: #00caff;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      text-decoration: none;
+    }
+
+    .cta-button:hover {
+      background: #00a0cc;
+    }
+
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin: 60px 0;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .feature-box {
+      background: #1c1c1c;
+      padding: 25px;
+      border-radius: 10px;
+      width: 280px;
+      box-shadow: 0 5px 20px rgba(0, 255, 255, 0.05);
+    }
+
+    .feature-box h3 {
+      color: #00caff;
+      margin-bottom: 15px;
+    }
+
+    .feature-box p {
+      font-size: 0.95rem;
+      color: #ccc;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 20px 0;
+      font-size: 0.9rem;
+      color: #aaa;
+      width: 100%;
+      text-align: center;
+      border-top: 1px solid #222;
+    }
+
+    footer a {
+      color: #00caff;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <h1>ShadowBox</h1>
+    <h2>Secure Your Files with Ease</h2>
+    <p>Protect your sensitive data with top-tier encryption. Simple, secure, and trusted.</p>
+    <a href="/signup" class="cta-button">Get Started</a>
+  </section>
+
+  <div class="features">
+    <div class="feature-box">
+      <h3>End-to-End Encryption</h3>
+      <p>Only you can access your files. Not even we can see them.</p>
+    </div>
+    <div class="feature-box">
+      <h3>Sync Across Devices</h3>
+      <p>Your files, anytime and anywhere you need them.</p>
+    </div>
+    <div class="feature-box">
+      <h3>Clean Interface</h3>
+      <p>Modern design with zero clutter and maximum efficiency.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 ShadowBox | <a href="/privacy-policy">Privacy Policy</a></p>
+  </footer>
+
+</body>
+</html>

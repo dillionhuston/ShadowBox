@@ -17,7 +17,6 @@ def signup():
         password = request.form['password']
         email = request.form['email']
 
-        # Check if email already exists
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
             flash('Email is already taken. Please use a different email address.')

@@ -18,6 +18,5 @@ class Files():
             file = request.files['file']
             filename = file.filename
             encrypter.encrypt(file)
-            print(file)
             return render_template('dashboard.html', filename=filename)
         
