@@ -18,26 +18,24 @@ class EncryptionService():
         key = pbkdf2_hmac(hash_name='sha256', password=password.encode(), salt=salt, iterations=iterations, dklen=32)
         return 
     
-    @staticmethod
-    def encrypt(file_data)-> bytes:
-        print(file_data)
-        key = User.get_key()
+
+    
+    def encrypt(file_data):
+        """gets users key. the function then read the file in chunks and then encrpyts them all"""
+        key = User.get_key(User)
         cipher = AES.new(key, AES.MODE_GCM)
         nonce = cipher.nonce
-        cipher, tag = cipher.encrypt_and_digest(file_data)
-       
+        encrypted_data = b""
 
-
-       
-
+        while chunk := file_data.read(4096):  #4kb
+            encrypted_chunk, tag = cipher.encrypt_and_digest(chunk)
+            encrypted_data += encrypted_chunk 
         
-
-        
-       
-
-
-       
+        encrypted_data = nonce + tag + encrypted_data
+        print(encrypted_data)
+        return encrypted_data  
     
+
 
     @staticmethod
     def decrypt(file_data, key):
