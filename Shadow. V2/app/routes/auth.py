@@ -50,8 +50,8 @@ def login():
         
         if user and User.verify_hash(password, user.password):
             flash('Login successful!')
-            # add session id here flask-login
             return ('dashboard.html') #change to redirect
+    
         else:
             flash('Invalid username or password.')
 

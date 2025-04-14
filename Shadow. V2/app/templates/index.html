@@ -1,151 +1,290 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ShadowBox - Secure Your Files</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShadowBox - Next-Gen Network Monitoring</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to bottom right, #0f0f0f, #1a1a1a);
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-    .hero {
-      background: #111;
-      border: 1px solid #222;
-      border-radius: 15px;
-      padding: 60px 30px;
-      box-shadow: 0 10px 30px rgba(0, 255, 255, 0.1);
-      max-width: 800px;
-      width: 100%;
-      margin-top: 50px;
-    }
+        /* Particle Background */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+        }
 
-    .hero h1 {
-      font-size: 3rem;
-      color: #00caff;
-      margin-bottom: 20px;
-    }
+        /* Hero Section */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 20px;
+            margin: 40px auto;
+            max-width: 1000px;
+            border-radius: 15px;
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1.5s ease-out;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 170, 255, 0.2) 10%, transparent 60%);
+            animation: pulse 10s infinite ease-in-out;
+            z-index: -1;
+        }
+        .hero h1 {
+            font-size: 60px;
+            font-weight: 700;
+            color: #00d4ff;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.7);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+        .hero h2 {
+            font-size: 24px;
+            font-weight: 300;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+            max-width: 600px;
+        }
+        .hero p {
+            font-size: 16px;
+            color: #a0a0a0;
+            margin-bottom: 30px;
+            max-width: 500px;
+        }
+        .cta-button {
+            padding: 15px 35px;
+            background: linear-gradient(45deg, #00d4ff, #007bff);
+            color: #fff;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            background: linear-gradient(45deg, #007bff, #00d4ff);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.8);
+            transform: translateY(-3px);
+        }
 
-    .hero h2 {
-      font-weight: 400;
-      font-size: 1.4rem;
-      color: #eee;
-      margin-bottom: 20px;
-    }
+        /* Features Section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+        .feature-box {
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.9), rgba(50, 50, 50, 0.7));
+            padding: 40px 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #00d4ff;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        .feature-box:hover::before {
+            transform: scaleX(1);
+        }
+        .feature-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.3);
+        }
+        .feature-box h3 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+        .feature-box p {
+            font-size: 14px;
+            color: #c0c0c0;
+            line-height: 1.6;
+        }
 
-    .hero p {
-      font-size: 1rem;
-      color: #bbb;
-      margin-bottom: 30px;
-    }
+        /* Footer Section */
+        footer {
+            width: 100%;
+            padding: 20px 0;
+            background: rgba(10, 10, 10, 0.9);
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-top: 40px;
+        }
+        footer a {
+            color: #00d4ff;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+        footer a:hover {
+            color: #007bff;
+        }
 
-    .cta-button {
-      padding: 12px 24px;
-      background: #00caff;
-      color: #000;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      text-decoration: none;
-    }
+        /* Animations */
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.3; }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
 
-    .cta-button:hover {
-      background: #00a0cc;
-    }
-
-    .features {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-      margin: 60px 0;
-      width: 100%;
-      max-width: 1000px;
-    }
-
-    .feature-box {
-      background: #1c1c1c;
-      padding: 25px;
-      border-radius: 10px;
-      width: 280px;
-      box-shadow: 0 5px 20px rgba(0, 255, 255, 0.05);
-    }
-
-    .feature-box h3 {
-      color: #00caff;
-      margin-bottom: 15px;
-    }
-
-    .feature-box p {
-      font-size: 0.95rem;
-      color: #ccc;
-    }
-
-    footer {
-      margin-top: auto;
-      padding: 20px 0;
-      font-size: 0.9rem;
-      color: #aaa;
-      width: 100%;
-      text-align: center;
-      border-top: 1px solid #222;
-    }
-
-    footer a {
-      color: #00caff;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-  </style>
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 40px;
+            }
+            .hero h2 {
+                font-size: 20px;
+            }
+            .feature-box {
+                padding: 30px 15px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Particle Background -->
+    <canvas id="particles"></canvas>
 
-  <section class="hero">
-    <h1>ShadowBox</h1>
-    <h2>Secure Your Files with Ease</h2>
-    <p>Protect your sensitive data with top-tier encryption. Simple, secure, and trusted.</p>
-    <a href="/signup" class="cta-button">Get Started</a>
-  </section>
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>ShadowBox</h1>
+        <h2>Next-Generation Network Monitoring</h2>
+        <p>Empower your infrastructure with real-time analytics, AI-driven threat detection, and seamless integrations.</p>
+        <a href="/signup" class="cta-button">Try for Free</a>
+    </section>
 
-  <div class="features">
-    <div class="feature-box">
-      <h3>End-to-End Encryption</h3>
-      <p>Only you can access your files. Not even we can see them.</p>
+    <!-- Features Section -->
+    <div class="features">
+        <div class="feature-box">
+            <h3>Live Network Insights</h3>
+            <p>Monitor performance with real-time dashboards and instant alerts for anomalies.</p>
+        </div>
+        <div class="feature-box">
+            <h3>Intelligent Security</h3>
+            <p>Leverage AI to identify and neutralize threats before they impact your network.</p>
+        </div>
+        <div class="feature-box">
+            <h3>Effortless Integration</h3>
+            <p>Sync with your existing tools like Splunk, AWS, and more in minutes.</p>
+        </div>
     </div>
-    <div class="feature-box">
-      <h3>Sync Across Devices</h3>
-      <p>Your files, anytime and anywhere you need them.</p>
-    </div>
-    <div class="feature-box">
-      <h3>Clean Interface</h3>
-      <p>Modern design with zero clutter and maximum efficiency.</p>
-    </div>
-  </div>
 
-  <footer>
-    <p>&copy; 2025 ShadowBox | <a href="/privacy-policy">Privacy Policy</a></p>
-  </footer>
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2025 ShadowBox | <a href="/privacy-policy">Privacy Policy</a> | <a href="/terms">Terms of Service</a> | <a href="/contact">Contact Us</a></p>
+    </footer>
 
+    <!-- Particle.js Script -->
+    <script>
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray = [];
+        const numberOfParticles = 100;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 5 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.1;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(0, 212, 255, 0.5)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+                if (particlesArray[i].size <= 0.2) {
+                    particlesArray.splice(i, 1);
+                    i--;
+                    particlesArray.push(new Particle());
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
 </body>
 </html>

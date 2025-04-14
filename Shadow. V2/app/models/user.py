@@ -3,11 +3,11 @@ import logging
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from passlib.hash import pbkdf2_sha256
-from app.services.encryption import EncryptionService
-from uuid_utils import uuid4
+import uuid
 logger = logging.getLogger(__name__)
 
 db = SQLAlchemy()
+user_id = str(uuid.uuid4())
 
 class User(db.Model, UserMixin):
     __tablename__ = "users"
@@ -18,21 +18,26 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(255), nullable=False)   
     key = db.Column(db.LargeBinary, nullable=False)      
 
-  
+    
     @staticmethod
     def add_user(username, email, password):
+        #import directly rather than preloading 
+        from app.services.encryption import EncryptionService
+
         """creates a new uuid for the user, generates hash for password and aes key"""
         hashed_password = User.hash_password(password)  
-        key, salt = EncryptionService.generate_key(password)
+        service = EncryptionService()
+        key, salt = service.generate_key(password)
         logger.info(f"Generated encryption key: {key}")
-        new_user = User(username=username, email=email, password=hashed_password, key=key)
+        new_user = User(username=username, email=email, password=hashed_password, key=key, id=user_id)
 
         # add new user 
         db.session.add(new_user)
         db.session.commit()
 
-        print(f"Signed up {new_user}")
+        print(f"Signed up {new_user} {user_id}")
         return User.query.filter_by(username=username).first()
+    
 
     @staticmethod
     def hash_password(password):
@@ -44,3 +49,7 @@ class User(db.Model, UserMixin):
     def verify_hash(password, hash):
         """Verifies if the password matches the hash"""
         return pbkdf2_sha256.verify(password, hash)
+
+    def get_key(self):
+        user = User.query.filter_by(id=self.id).first()
+        return user.key if user else None

@@ -1,11 +1,10 @@
 
-from app import Database
 from flask_sqlalchemy import SQLAlchemy
 import logging
 
 db = SQLAlchemy()
 from flask_sqlalchemy import SQLAlchemy
-class File(db.Modell):
+class File(db.Model):
     __tablename__ = "files"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -14,7 +13,7 @@ class File(db.Modell):
     file_name = db.Column(db.String(300), nullable=False)
 
 
-    def add_file(file, filename, filepath, userid):
+    def add_file(file, filename, filepath, user_id):
         newfile = File(file_path=filepath, file_name=filename, userid=id )
         db.session.commit(newfile)
         return
