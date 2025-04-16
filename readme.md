@@ -1,25 +1,50 @@
-# 📦 ShadowBox – Secure & Private Cloud Storage
+# ShadowBox 📦
+
+**Secure & Private Cloud Storage**
+
+---
 
 ## 🚀 Overview
-THIS IS A PROTOTYPE. DONT USE FOR SENSITIVE DATA
-ShadowBox is a **privacy-first, decentralized cloud storage** platform that lets users securely store and share files without relying on big tech companies. Built with **end-to-end encryption, peer-to-peer (P2P) networking, and advanced access control**, this project ensures **maximum security and ownership** over your data.
 
-## 🎯 Features (MVP)
-- 🔐 **Secure File Uploads** – All files are encrypted before storage.
-- 🌍 **Decentralized Storage** – No single point of failure.
-- 🔑 **Advanced Access Control** – Users can share files with expiration times & permissions.
-- ⚡ **Fast & Scalable** – Designed for high performance and real-world usage.
+> ⚠️ **Prototype Warning**: ShadowBox is in early development. Avoid using it for sensitive or production data.
 
-## 🔧 Tech Stack
-- **Backend:** Python (FastAPI / Flask for API)
-- **Storage:** IPFS / S3-Compatible Cloud
-- **Frontend:** HTML, CSS, JavaScript (Flask/Jinja for templating)
-- **Database:** PostgreSQL / SQLite
-- **Encryption:** AES-256 & RSA (end-to-end security)
-- **Networking:** WebRTC / P2P protocols
-- **Deployment:** Docker + Kubernetes
+ShadowBox is a **privacy-first**, **encrypted** cloud storage solution built with **Python**, **Flask**, and **SQL**. Designed for security and scalability, it leverages **object-oriented programming** principles to ensure maintainability. Our vision is a decentralized, secure file-sharing platform that puts user control first.
 
-## 🛠 Installation & Setup
+---
+
+## 🌲 Branches
+
+- `main`: Functional prototype. Expect some rough edges.
+- `ShadowBox-V2`: Work-in-progress refactor. Cleaner, more scalable architecture.
+
+---
+
+## 🎯 Core Features (MVP)
+
+- 🔒 **AES-256 Encrypted File Uploads**
+- 🧑‍💻 **User Authentication & File Ownership**
+- 📂 **Secure File Storage & Retrieval**
+- ⏰ **Expiring Links & Access Controls**
+- 🛠️ **Modular OOP Architecture**
+
+---
+
+## 🛠️ Tech Stack
+
+| Component | Technology |
+| --- | --- |
+| **Backend** | Python (Flask), OOP Design |
+| **Frontend** | Jinja2, HTML, CSS, JavaScript |
+| **Database** | SQLite (PostgreSQL planned) |
+| **Encryption** | AES-256, RSA (end-to-end planned) |
+| **Deployment** | Docker, Coolify (Kubernetes planned) |
+
+---
+
+## ⚙️ Installation
+
+Get ShadowBox up and running in minutes:
+
 ```bash
 # Clone the repository
 git clone https://github.com/dillionhuston/shadowbox.git
@@ -27,29 +52,57 @@ cd shadowbox
 
 # Install dependencies
 pip install -r requirements.txt
-Run flask run inside /static folder/
 
+# Launch the app
+flask run
 ```
 
-## 📢 How to Contribute
-We’re actively looking for **developers, security experts, and UI/UX designers** to improve ShadowBox!
-
-1. **Fork the repository** and clone it locally.
-2. **Check the Issues tab** for tasks to work on.
-3. Create a new branch (`git checkout -b feature-name`).
-4. Work on your feature and commit changes.
-5. Submit a **Pull Request** (PR) with a clear explanation.
-
-### 🤝 Community & Support
-- Report bugs or request features in the **Issues tab**
+> **Note**: Run from the root directory or `/static` based on your setup.
 
 ---
-### 📌 Roadmap
--✅ **Phase 1:** Basic encryption & file upload, (Complete MVPS'S)
--🔲 **Phase 2:** Decentralized storage integration,
--🔲 **Phase 3:** Real-time file sharing & collaboration,
--🔲 **Phase 4:** Business plan & monetization
+
+## 🛤️ Roadmap
+
+- ✅ **Phase 1**: Core encryption & file uploads (MVP complete)
+- 🔄 **Phase 2**: Refactor for scalability (ShadowBox-V2 in progress)
+- ⏳ **Phase 3**: Decentralized storage (IPFS or custom nodes)
+- 🚀 **Phase 4**: Real-time sharing, collaboration, monetization
 
 ---
-### 📜 License
-MIT License – Use, modify, and contribute freely!
+
+## 🤝 Contributing
+
+We’re excited to build ShadowBox with the community! Here’s how to jump in:
+
+1. Fork and clone the repo:
+
+   ```bash
+   git clone https://github.com/dillionhuston/shadowbox.git
+   ```
+2. Choose a branch: `main` (prototype) or `ShadowBox-V2` (refactor).
+3. Create a feature branch:
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+4. Commit your changes and push.
+5. Open a **Pull Request** 🎉
+
+---
+
+## 📬 Contact & Support
+
+- 🐛 **Bugs or Questions**: Open an issue.
+- 💡 **Feedback or Ideas**: Reach out via GitHub.
+- 🔄 **Pull Requests**: Always welcome!
+
+---
+
+## 📄 License
+
+**MIT License** – Free to use, modify, and share.\
+Crafted with ☕, 💻, and a dash of chaos.
+
+---
+
+*ShadowBox: Your files, your control, your privacy.*
