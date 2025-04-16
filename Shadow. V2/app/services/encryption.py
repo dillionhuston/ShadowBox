@@ -10,35 +10,34 @@ from app.models.user import User
 from app.models.file import File
 from config import Config  #neeed for config 
 
+
 encrypted_file_path = 'encrypted' # remove this and revert to config.py
+
+filedb = File
 logger = logging.getLogger(__name__)
 
 class EncryptionService:
-    """Service for handling AES-256 encryption and decryption of files."""
-
     @staticmethod
-    def generate_key(password: str) -> bytes:
-        """Generates a 256-bit AES key from a user's password using PBKDF2."""
+    def generate_key(password: str) -> tuple[bytes, bytes]:
         salt = get_random_bytes(16)
         iterations = 100_000
         key = pbkdf2_hmac('sha256', password.encode(), salt, iterations, dklen=32)
         logger.debug("Key generated with PBKDF2.")
-        return key
+        return key, salt
 
     @staticmethod
     def generate_id() -> uuid.UUID:
-        """Generates a unique UUID for a file."""
+        """Generates a  UUID for a file"""
         return uuid.uuid4()
 
     @staticmethod
-    def encrypt(file):
-        
-        """Encrypts file data using AES-GCM and saves the encrypted file"""
+    def encrypt(file,):
         key = User.get_key(User) 
         cipher = AES.new(key, AES.MODE_GCM)
+        f_id = EncryptionService.generate_id()
         nonce = cipher.nonce
         encrypted_data = b""
-
+        
         logger.info("Starting encryption...")
 
         while chunk := file.stream.read(4096):
@@ -47,25 +46,40 @@ class EncryptionService:
         tag = cipher.digest()
         full_payload = nonce + tag + encrypted_data
 
-        EncryptionService.save_file(file.filename, full_payload)
-        del key, cipher, encrypted_data, tag, nonce, full_payload # do this so people cant read memory 
+        EncryptionService.save_file(file.filename, full_payload, file_id=f_id)
+        del key, cipher, encrypted_data, tag, nonce # do this so people cant read memory 
         logger.info("Encryption completed successfully. Cleaned up memory")
         return full_payload
     
+    
+
     @staticmethod
-    def save_file(filename: str, data: bytes):
+    def save_file(filename, data: bytes, file_id):
+
+        #get needed data for later 
         safe_name = secure_filename(filename)
         file_path = os.path.join(encrypted_file_path, filename)
         os.makedirs(encrypted_file_path, exist_ok=True) # create folder if not valid
+
+        #add data once we have it
+        filedb.add_file(filename=safe_name, filepath=file_path, file_id=file_id )
         try:
             with open(file_path, 'wb') as f:
                 f.write(data)
             logger.info(f"Saved encrypted file: {safe_name} at {file_path}")
         except Exception as e:
             logger.error(f"Failed to save file: {e}")
+        return
 
-              
+    
 
     @staticmethod
-    def decrypt(file_data, key):
-        pass
+    def decrypt(file_data ):
+      #need to get data from db about file metadata we have saved
+      key = User.get_key(User) 
+      cipher = AES.new(key, AES.MODE_GCM)
+      nonce = cipher.nonce
+      plaindata = cipher.decrypt(file_data)
+      logger.warn("callng frm decrypt")
+      return plaindata
+    

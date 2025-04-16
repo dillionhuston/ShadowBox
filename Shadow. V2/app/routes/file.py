@@ -10,9 +10,11 @@ class Files():
     """its better to sperate into two functions rather than one. make it instantly obvious """
     @file_bp.route('/upload', methods=['GET'])
     def upload_page():
-            
             return render_template('upload.html')
     
+    """need to add some secuiry checks here min file size, hash matching to see if its known file for exploit
+    validate file type/extension. filename lengh. authorised users only. protect from CSRF
+    """
     @file_bp.route('/upload', methods=['POST'])
     def upload_file():
             file = request.files['file']

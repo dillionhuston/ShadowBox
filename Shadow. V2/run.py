@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from config import Config
 from app.routes.auth import auth_bp
 from app.routes.file import file_bp
-from app.models.user import db
+from app.models import db
 
 
 app = Flask(__name__, template_folder='app/templates')
@@ -27,8 +27,8 @@ def apply_csp(response: Response):
     return response
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+def home():
+    return render_template("index.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

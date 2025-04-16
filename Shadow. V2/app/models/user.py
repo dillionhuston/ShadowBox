@@ -3,17 +3,18 @@ import logging
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from passlib.hash import pbkdf2_sha256
+from . import db
 import uuid
+
 logger = logging.getLogger(__name__)
 
-db = SQLAlchemy()
 user_id = str(uuid.uuid4())
 
 class User(db.Model, UserMixin):
-    __tablename__ = "users"
+    __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(250), unique=True, nullable=False)  
+    username = db.Column(db.String(250), unique=True, nullable=False)  s
     email = db.Column(db.String(150), unique=True, nullable=False)     
     password = db.Column(db.String(255), nullable=False)   
     key = db.Column(db.LargeBinary, nullable=False)      

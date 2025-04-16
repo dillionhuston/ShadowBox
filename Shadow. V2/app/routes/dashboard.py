@@ -8,6 +8,8 @@ class Dashboard():
         self.app = app
         self.app.register_blueprint(Dashboard)
 
+        
+
 
     @dash_bp.route('/dashbaord')
     def signup(self):
