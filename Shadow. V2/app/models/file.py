@@ -15,5 +15,7 @@ class File(db.Model):
 
     def add_file(file, filename, filepath, user_id):
         newfile = File(file_path=filepath, file_name=filename, userid=id )
-        db.session.commit(newfile)
+        db.session.add(newfile)
+        db.session.commit()
+        
         return
