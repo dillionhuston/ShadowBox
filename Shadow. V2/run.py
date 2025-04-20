@@ -1,26 +1,26 @@
 from flask import Flask, Response, render_template
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 from config import Config
 from app.routes.auth import auth_bp
 from app.routes.file import file_bp
-from app.models import db
-
+from app.models import db, user  # Assuming User is the correct model name
 
 app = Flask(__name__, template_folder='app/templates')
+login_manager = LoginManager()
+
 app.config.from_object(Config)
 db.init_app(app)
+login_manager.init_app(app)
 
 with app.app_context():
-    db.create_all()  
+    db.create_all()
 
-# place into config
-app.config['SECRET_KEY'] = '11/0bb4^95ef94aeTo95be88b27b1173857d9b32c3f'
-
-# register route bp's
+# Register route blueprints
 app.register_blueprint(auth_bp)
 app.register_blueprint(file_bp)
 
-# basic content secuirty for now 
+# Basic Content Security Policy
 @app.after_request
 def apply_csp(response: Response):
     response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self'; style-src 'self';"
@@ -29,6 +29,10 @@ def apply_csp(response: Response):
 @app.route('/')
 def home():
     return render_template("index.html")
+
+@login_manager.user_loader
+def user_loader(username):
+    return user.query.filter_by(username=username).first()
 
 if __name__ == "__main__":
     app.run(debug=True)

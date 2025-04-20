@@ -1,56 +1,75 @@
-# models.py
 import logging
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from passlib.hash import pbkdf2_sha256
 from . import db
-import uuid
 
 logger = logging.getLogger(__name__)
-
-user_id = str(uuid.uuid4())
 
 class User(db.Model, UserMixin):
     __tablename__ = "user"
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(250), unique=True, nullable=False)  s
-    email = db.Column(db.String(150), unique=True, nullable=False)     
-    password = db.Column(db.String(255), nullable=False)   
-    key = db.Column(db.LargeBinary, nullable=False)      
+    id = db.Column(db.Integer, primary_key=True) 
+    username = db.Column(db.String(250), unique=True, nullable=False)
+    email = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    key = db.Column(db.LargeBinary(32), nullable=False)  
 
-    
     @staticmethod
-    def add_user(username, email, password):
-        #import directly rather than preloading 
+    def add_user(username: str, email: str, password: str) -> 'User':
         from app.services.encryption import EncryptionService
+        from sqlalchemy.exc import IntegrityError
 
-        """creates a new uuid for the user, generates hash for password and aes key"""
-        hashed_password = User.hash_password(password)  
-        service = EncryptionService()
-        key, salt = service.generate_key(password)
-        logger.info(f"Generated encryption key: {key}")
-        new_user = User(username=username, email=email, password=hashed_password, key=key, id=user_id)
+        try:
+            # Hash the password
+            hashed_password = User.hash_password(password)
 
-        # add new user 
-        db.session.add(new_user)
-        db.session.commit()
+            # Generate encryption key and salt
+            service = EncryptionService()
+            key, salt = service.generate_key(password)
+            logger.debug(f"Generated encryption key for user {username} (key not logged for security)")
 
-        print(f"Signed up {new_user} {user_id}")
-        return User.query.filter_by(username=username).first()
-    
+            # Create new user 
+            new_user = User(
+                username=username,
+                email=email,
+                password=hashed_password,
+                key=key
+                
+            )
+
+            db.session.add(new_user)
+            db.session.commit()
+
+            logger.info(f"Successfully created user {username} with ID {new_user.id}")
+            return new_user
+        
+        #some error handling
+        except IntegrityError as e:
+            db.session.rollback()
+            logger.error(f"Failed to create user {username}: Username or email already exists - {str(e)}")
+            raise ValueError("Username or email already taken")
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Unexpected error creating user {username}: {str(e)}")
+            raise Exception(f"Failed to create user: {str(e)}")
 
     @staticmethod
-    def hash_password(password):
-        """Hashes the given password using pbkdf2_sha256 algorithm"""
-        print("Hashing password")
+    def hash_password(password: str) -> str:
+        logger.debug("Hashing password")
         return pbkdf2_sha256.hash(password)
 
     @staticmethod
-    def verify_hash(password, hash):
-        """Verifies if the password matches the hash"""
+    def verify_hash(password: str, hash: str) -> bool:
         return pbkdf2_sha256.verify(password, hash)
 
-    def get_key(self):
-        user = User.query.filter_by(id=self.id).first()
-        return user.key if user else None
+    def get_key(self) -> bytes:
+        if self.key is None:
+            logger.error(f"No encryption key found for user {self.id}")
+            raise ValueError(f"No encryption key available for user {self.id}")
+        if not isinstance(self.key, bytes):
+            logger.error(f"Invalid key type for user {self.id}: {type(self.key)}")
+            raise ValueError(f"Invalid key type for user {self.id}: Expected bytes, got {type(self.key)}")
+        
+        logger.debug(f"Retrieved encryption key for user {self.id}")
+        return self.key

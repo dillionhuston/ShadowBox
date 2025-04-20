@@ -25,14 +25,11 @@ class EncryptionService:
         logger.debug("Key generated with PBKDF2.")
         return key, salt
 
-    @staticmethod
-    def generate_id() -> uuid.UUID:
-        """Generates a  UUID for a file"""
-        return uuid.uuid4()
+   
 
     @staticmethod
-    def encrypt(file,):
-        key = User.get_key(User) 
+    def encrypt(file: bytes):
+        key = User.get_key() # need to get user aes key from db here
         cipher = AES.new(key, AES.MODE_GCM)
         f_id = EncryptionService.generate_id()
         nonce = cipher.nonce
