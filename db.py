@@ -4,6 +4,8 @@ from flask import Flask
 from typing import Optional
 import utils  # Ensure this is imported if using `TryWithLogErrorDecorator`
 #? Err, btw, where is it?
+#d Add soon. db will be parent class and two childs for file and user
+
 
 class Database:
     """A static class to manage the database."""
