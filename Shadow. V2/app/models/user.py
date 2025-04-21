@@ -9,15 +9,16 @@ logger = logging.getLogger(__name__)
 class User(db.Model, UserMixin):
     __tablename__ = "user"
 
-    id = db.Column(db.Integer, primary_key=True) 
+    id = db.Column(db.String(64), primary_key=True) 
     username = db.Column(db.String(250), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
-    key = db.Column(db.LargeBinary(32), nullable=False)  
+    key = db.Column(db.LargeBinary(32), nullable=False)
+    salt = db.Column(db.LargeBinary(32), nullable=False)
 
     @staticmethod
     def add_user(username: str, email: str, password: str) -> 'User':
-        from app.services.encryption import EncryptionService
+        from app.services.encryption import EncryptionService #? Huh? Why import here? Isn't this will make it slow down?
         from sqlalchemy.exc import IntegrityError
 
         try:
@@ -34,8 +35,8 @@ class User(db.Model, UserMixin):
                 username=username,
                 email=email,
                 password=hashed_password,
-                key=key
-                
+                key=key,
+                salt=salt
             )
 
             db.session.add(new_user)
@@ -43,6 +44,7 @@ class User(db.Model, UserMixin):
 
             logger.info(f"Successfully created user {username} with ID {new_user.id}")
             return new_user
+        
         
         #some error handling
         except IntegrityError as e:
@@ -53,6 +55,14 @@ class User(db.Model, UserMixin):
             db.session.rollback()
             logger.error(f"Unexpected error creating user {username}: {str(e)}")
             raise Exception(f"Failed to create user: {str(e)}")
+        
+    def remove_file(id: str) -> bool:
+        user = User.query.filter_by(id=id).first()
+        if user is None:
+            return False
+        db.session.delete(user)
+        db.session.commit()
+        return True        
 
     @staticmethod
     def hash_password(password: str) -> str:

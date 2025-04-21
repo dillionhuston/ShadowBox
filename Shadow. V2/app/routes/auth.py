@@ -32,7 +32,7 @@ def signup():
         print(User.id)
         if user:
             flash('User registered successfully! Please log in.')
-            return redirect(url_for('auth.login'))  
+            return redirect(url_for('auth.login'))
         else:
             flash('Something went wrong. Please try again.')
             
