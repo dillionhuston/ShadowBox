@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 from typing import Optional
 import utils  # Ensure this is imported if using `TryWithLogErrorDecorator`
+#? Err, btw, where is it?
 
 class Database:
     """A static class to manage the database."""
