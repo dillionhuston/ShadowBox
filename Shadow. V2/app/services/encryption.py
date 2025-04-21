@@ -1,6 +1,7 @@
 import os
 import uuid
 import logging
+from flask_login import current_user
 from Crypto.Cipher import AES
 from Crypto.Hash import HMAC, SHA256
 from Crypto.Random import get_random_bytes
@@ -29,7 +30,7 @@ class EncryptionService:
 
     @staticmethod
     def encrypt(file: bytes):
-        key = User.get_key() # need to get user aes key from db here
+        key = User.get_key(User.key)
         cipher = AES.new(key, AES.MODE_GCM)
         f_id = EncryptionService.generate_id()
         nonce = cipher.nonce

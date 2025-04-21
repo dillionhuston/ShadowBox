@@ -51,16 +51,17 @@ def login():
     if request.method == 'POST':
         if User.is_active:
           return 'user alreading actice'
-        username = request.form['username']
-        password = request.form['password']
-        user_query = User.query.filter_by(username=username).first()
-        if user_query and User.verify_hash(password, User.password):
-            user = User()
-            flash('Login successful!')
-            return ('dashboard.html') #change to redirect
         else:
-            flash('Invalid username or password.')
-        return render_template('login.html')
+            username = request.form['username']
+            password = request.form['password']
+            user_query = User.query.filter_by(username=username).first()
+            if user_query and User.verify_hash(password, User.password):
+                login_user(User)
+                flash('Login successful!')
+                return ('dashboard.html') #change to redirect
+            else:
+                flash('Invalid username or password.')
+            return render_template('login.html')
 
 
 # Logout

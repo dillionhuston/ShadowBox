@@ -2,6 +2,8 @@ import logging
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from passlib.hash import pbkdf2_sha256
+from app.services.encryption import EncryptionService
+from sqlalchemy.exc import IntegrityError
 from . import db
 
 logger = logging.getLogger(__name__)
@@ -18,8 +20,11 @@ class User(db.Model, UserMixin):
 
     @staticmethod
     def add_user(username: str, email: str, password: str) -> 'User':
+<<<<<<< Updated upstream
         from app.services.encryption import EncryptionService #? Huh? Why import here? Isn't this will make it slow down?
         from sqlalchemy.exc import IntegrityError
+=======
+>>>>>>> Stashed changes
 
         try:
             # Hash the password
@@ -73,10 +78,16 @@ class User(db.Model, UserMixin):
     def verify_hash(password: str, hash: str) -> bool:
         return pbkdf2_sha256.verify(password, hash)
 
+    @staticmethod
     def get_key(self) -> bytes:
+        if User is None:
+            logger.error("No user ID provided")
+            raise ValueError("No user ID provided")
+        
         if self.key is None:
             logger.error(f"No encryption key found for user {self.id}")
             raise ValueError(f"No encryption key available for user {self.id}")
+        
         if not isinstance(self.key, bytes):
             logger.error(f"Invalid key type for user {self.id}: {type(self.key)}")
             raise ValueError(f"Invalid key type for user {self.id}: Expected bytes, got {type(self.key)}")

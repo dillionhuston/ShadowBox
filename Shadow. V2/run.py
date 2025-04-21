@@ -7,10 +7,12 @@ from app.routes.file import file_bp
 from app.models import db, user  # Assuming User is the correct model name
 
 app = Flask(__name__, template_folder='app/templates')
-login_manager = LoginManager()
-
 app.config.from_object(Config)
 db.init_app(app)
+
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
+
 login_manager.init_app(app)
 
 with app.app_context():
