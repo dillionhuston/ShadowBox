@@ -19,10 +19,10 @@
             color: #fff;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;  /* Ensures footer stays at bottom */
             align-items: center;
             text-align: center;
-            height: 100vh;
+            min-height: 100vh;  /* Ensure body takes at least the full height */
             padding: 20px;
             overflow-x: hidden;
         }
@@ -117,14 +117,14 @@
 
         /* Footer Section */
         footer {
-            position: absolute;
-            bottom: 0;
+            position: relative;
             width: 100%;
             padding: 20px 0;
             background: rgba(40, 40, 40, 0.8);
             text-align: center;
             color: #aaa;
             font-size: 14px;
+            margin-top: auto;  /* Push footer to the bottom if content is short */
         }
         footer a {
             color: #00aaff;
