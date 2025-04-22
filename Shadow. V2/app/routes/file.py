@@ -1,16 +1,14 @@
 """ file upload/download/decryption routes"""
 
-<<<<<<< Updated upstream
 import os, datetime
 from uuid import uuid4
-from flask import Blueprint, render_template, url_for, redirect, request, Response
-=======
+from flask import Blueprint, render_template, url_for, redirect, request, Response, current_app
+from flask_login import login_required, current_user
 import os
 import uuid
-from flask import Blueprint, render_template, url_for, redirect, request, Response, current_app
->>>>>>> Stashed changes
 from app.services.encryption import EncryptionService
 from app.models.file import File
+
 
 #template folder/ encrypted folder
 file_bp = Blueprint('file', __name__, template_folder='templates')
@@ -29,14 +27,18 @@ class Files():
     """
     
     """return upload page"""
+
+    @login_required
     @file_bp.route('/upload', methods=['GET'])
     def upload_page():
             return render_template('upload.html')
     
 
     """"upload handling"""
+   
     @file_bp.route('/upload', methods=['POST'])
     def upload_file():
+           
             file = request.files['file']
             Files.get_file_data(file)
             encrypter.encrypt(file)
@@ -57,4 +59,3 @@ class Files():
         file_path = os.path.join(encrypted_folder, filename)
         file_id = cls.generate_id()
         return file_id, file_path, filename
-                  

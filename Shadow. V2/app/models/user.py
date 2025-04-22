@@ -1,14 +1,14 @@
 import logging
+import uuid
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from passlib.hash import pbkdf2_sha256
-from app.services.encryption import EncryptionService
-from sqlalchemy.exc import IntegrityError
 from . import db
+
 
 logger = logging.getLogger(__name__)
 
-class User(db.Model, UserMixin):
+class User(UserMixin, db.Model):
     __tablename__ = "user"
 
     id = db.Column(db.String(64), primary_key=True) 
@@ -18,25 +18,28 @@ class User(db.Model, UserMixin):
     key = db.Column(db.LargeBinary(32), nullable=False)
     salt = db.Column(db.LargeBinary(32), nullable=False)
 
+
+    def is_authenticated(self):
+        if current_user.is
+
+ 
     @staticmethod
     def add_user(username: str, email: str, password: str) -> 'User':
-<<<<<<< Updated upstream
-        from app.services.encryption import EncryptionService #? Huh? Why import here? Isn't this will make it slow down?
+        """hashes password, generates key and salt for user. adds new user to database"""
+
+        from app.services.encryption import EncryptionService
         from sqlalchemy.exc import IntegrityError
-=======
->>>>>>> Stashed changes
 
         try:
-            # Hash the password
             hashed_password = User.hash_password(password)
 
-            # Generate encryption key and salt
             service = EncryptionService()
             key, salt = service.generate_key(password)
             logger.debug(f"Generated encryption key for user {username} (key not logged for security)")
 
-            # Create new user 
+             
             new_user = User(
+                id=str(uuid.uuid4()),
                 username=username,
                 email=email,
                 password=hashed_password,
@@ -46,10 +49,10 @@ class User(db.Model, UserMixin):
 
             db.session.add(new_user)
             db.session.commit()
+            print(new_user)
 
             logger.info(f"Successfully created user {username} with ID {new_user.id}")
             return new_user
-        
         
         #some error handling
         except IntegrityError as e:
@@ -61,8 +64,9 @@ class User(db.Model, UserMixin):
             logger.error(f"Unexpected error creating user {username}: {str(e)}")
             raise Exception(f"Failed to create user: {str(e)}")
         
-    def remove_file(id: str) -> bool:
-        user = User.query.filter_by(id=id).first()
+    @staticmethod
+    def remove_user(id: str) -> bool:
+        user = User.query.filter_by(user_id=id).first()
         if user is None:
             return False
         db.session.delete(user)
@@ -78,19 +82,15 @@ class User(db.Model, UserMixin):
     def verify_hash(password: str, hash: str) -> bool:
         return pbkdf2_sha256.verify(password, hash)
 
-    @staticmethod
+
     def get_key(self) -> bytes:
-        if User is None:
-            logger.error("No user ID provided")
-            raise ValueError("No user ID provided")
-        
         if self.key is None:
-            logger.error(f"No encryption key found for user {self.id}")
-            raise ValueError(f"No encryption key available for user {self.id}")
-        
+            logger.error(f"No encryption key found for user {self.user_id}")
+            raise ValueError(f"No encryption key available for user {self.user_id}")
         if not isinstance(self.key, bytes):
-            logger.error(f"Invalid key type for user {self.id}: {type(self.key)}")
-            raise ValueError(f"Invalid key type for user {self.id}: Expected bytes, got {type(self.key)}")
-        
-        logger.debug(f"Retrieved encryption key for user {self.id}")
+            logger.error(f"Invalid key type for user {self.user_id}: {type(self.key)}")
+            raise ValueError(f"Invalid key type for user {self.user_id}: Expected bytes, got {type(self.key)}")
+        logger.debug(f"Retrieved encryption key for user {self.user_id}")
         return self.key
+            
+            
