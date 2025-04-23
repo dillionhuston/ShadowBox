@@ -21,6 +21,11 @@ class User(UserMixin, db.Model):
     def get_id(self):
         return self.id 
 
+
+    def get_current_user(self):
+        return current_user
+    
+    
     @staticmethod
     def add_user(username: str, email: str, password: str) -> 'User':
         """hashes password, generates key and salt for user. adds new user to database"""

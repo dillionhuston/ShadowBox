@@ -1,6 +1,7 @@
 import os
 import uuid
 import logging
+
 from flask_login import current_user
 from Crypto.Cipher import AES
 from Crypto.Hash import HMAC, SHA256
@@ -11,11 +12,11 @@ from app.models.user import User
 from app.models.file import File
 from app.services.storage import FileStorageService
 from config import Config
-import logging
+
 
 encrypted_file_path = Config.ENCRYPTED_FILE_PATH  
 
-filedb = File
+filedb = File()
 file_service = FileStorageService()
 logger = logging.getLogger()
 
@@ -37,18 +38,17 @@ class EncryptionService:
             data = file.read()
 
             cipher = AES.new(key, AES.MODE_GCM)
-            f_id = str(uuid.uuid4())
             nonce = cipher.nonce
 
             ciphertext, tag = cipher.encrypt_and_digest(data)
             encrypted_data = nonce + tag + ciphertext  
-            EncryptionService.save_file(encrypted_data, filename, file_id=f_id)
-            logger.debug(f"File encrypted successfully, file_id: {f_id}")
+            EncryptionService.save_file(encrypted_data, filename)
+           
 
             return
 
     @staticmethod
-    def save_file(data:bytes, filename:str, file_id):
+    def save_file(data:bytes, filename:str):
         safe_name = secure_filename(filename)
         file_path = os.path.join(encrypted_file_path, safe_name)
         try:
@@ -58,7 +58,7 @@ class EncryptionService:
             logger.error(f"Failed to save file: {e}")
             raise
         else:
-            filedb.add_file(filename=safe_name, filepath=file_path, file_id=file_id, owner_id=current_user.user_id)
+            filedb.add_file(filename=safe_name, filepath=file_path)
 
     @staticmethod
     def decrypt(file_data):
