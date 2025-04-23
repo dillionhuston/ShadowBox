@@ -37,7 +37,7 @@ ShadowBox is a **privacy-first**, **encrypted** cloud storage solution built wit
 | **Frontend** | Jinja2, HTML, CSS, JavaScript |
 | **Database** | SQLite (PostgreSQL planned) |
 | **Encryption** | AES-256, RSA (end-to-end planned) |
-| **Deployment** | Docker, Coolify (Kubernetes planned) |
+
 
 ---
 
