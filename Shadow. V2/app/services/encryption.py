@@ -26,35 +26,30 @@ class EncryptionService:
         return key, salt
 
     @staticmethod
-    def encrypt(file: bytes):
-        try:
-            key = current_user.get_key() 
-        except ValueError as e:
-            logger.error(f"Failed to get encryption key: {str(e)}")
-            raise
-        
-        if len(key) not in (16, 24, 32):
-            logger.error(f"Invalid key length for user {current_user.user_id}: {len(key)} bytes")
-        
-        cipher = AES.new(key, AES.MODE_GCM)
-        f_id = str(uuid.uuid4())
-        nonce = cipher.nonce
-        ciphertext, tag = cipher.encrypt_and_digest(file)
-        encrypted_data = ciphertext + tag
-        logger.debug(f"File encrypted successfully, file_id: {f_id}")
-        return encrypted_data, f_id, nonce
+    def encrypt(file: bytes, filepath: str):
+            try:
+                key = current_user.get_key() 
+            except ValueError as e:
+                logger.error(f"Failed to get encryption key: {str(e)}")
+                raise
+            
+            if len(key) not in (16, 24, 32):
+                logger.error(f"Invalid key length for user {current_user.user_id}: {len(key)} bytes")
+            
+            cipher = AES.new(key, AES.MODE_GCM)
+            f_id = str(uuid.uuid4())
+            nonce = cipher.nonce
+            ciphertext, tag = cipher.encrypt_and_digest(file)
+            encrypted_data = ciphertext + tag
+            logger.debug(f"File encrypted successfully, file_id: {f_id}")
+            
+            return encrypted_data, f_id, nonce
     
     @staticmethod
     def save_file(filename, data: bytes, file_id):
         safe_name = secure_filename(filename)
-        if '..' in safe_name or '/' in safe_name or '\\' in safe_name:
-            logger.error("Invalid filename detected")
-            raise ValueError("Invalid filename")
-
         file_path = os.path.join(encrypted_file_path, safe_name)
         os.makedirs(encrypted_file_path, exist_ok=True)
-
-        filedb.add_file(filename=safe_name, filepath=file_path, file_id=file_id, owner_id=current_user.user_id)
         try:
             with open(file_path, 'wb') as f:
                 f.write(data)
@@ -62,7 +57,9 @@ class EncryptionService:
         except Exception as e:
             logger.error(f"Failed to save file: {e}")
             raise
-        return
+        else:
+            filedb.add_file(filename=safe_name, filepath=file_path, file_id=file_id, owner_id=current_user.user_id)
+     
 
     @staticmethod
     def decrypt(file_data):

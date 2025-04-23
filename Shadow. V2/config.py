@@ -11,7 +11,6 @@ class Config:
 
 
     SECRET_KEY = '11/0bb4^95ef94aeTo95be88b27b1173857d9b32c3f'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///Users.db'  # Example URI
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///Users.db' 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-
     ENCRYPTED_FILE_PATH = 'Encrypted'

@@ -1,10 +1,9 @@
 import logging
 import uuid
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, current_user
+from flask_login import UserMixin
 from passlib.hash import pbkdf2_sha256
 from . import db
-
 
 logger = logging.getLogger(__name__)
 
@@ -17,12 +16,11 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(255), nullable=False)
     key = db.Column(db.LargeBinary(32), nullable=False)
     salt = db.Column(db.LargeBinary(32), nullable=False)
+    files = db.relationship('File', backref='owner', lazy=True)
 
+    def get_id(self):
+        return self.id 
 
-    def is_authenticated(self):
-        if current_user.is
-
- 
     @staticmethod
     def add_user(username: str, email: str, password: str) -> 'User':
         """hashes password, generates key and salt for user. adds new user to database"""
@@ -35,8 +33,7 @@ class User(UserMixin, db.Model):
 
             service = EncryptionService()
             key, salt = service.generate_key(password)
-            logger.debug(f"Generated encryption key for user {username} (key not logged for security)")
-
+            logger.debug(f"Generated encryption key for user {username}")
              
             new_user = User(
                 id=str(uuid.uuid4()),
@@ -49,12 +46,9 @@ class User(UserMixin, db.Model):
 
             db.session.add(new_user)
             db.session.commit()
-            print(new_user)
-
             logger.info(f"Successfully created user {username} with ID {new_user.id}")
             return new_user
         
-        #some error handling
         except IntegrityError as e:
             db.session.rollback()
             logger.error(f"Failed to create user {username}: Username or email already exists - {str(e)}")
@@ -65,8 +59,8 @@ class User(UserMixin, db.Model):
             raise Exception(f"Failed to create user: {str(e)}")
         
     @staticmethod
-    def remove_user(id: str) -> bool:
-        user = User.query.filter_by(user_id=id).first()
+    def remove_user(user_id: str) -> bool:
+        user = User.query.filter_by(id=user_id).first()
         if user is None:
             return False
         db.session.delete(user)
@@ -79,18 +73,5 @@ class User(UserMixin, db.Model):
         return pbkdf2_sha256.hash(password)
 
     @staticmethod
-    def verify_hash(password: str, hash: str) -> bool:
-        return pbkdf2_sha256.verify(password, hash)
-
-
-    def get_key(self) -> bytes:
-        if self.key is None:
-            logger.error(f"No encryption key found for user {self.user_id}")
-            raise ValueError(f"No encryption key available for user {self.user_id}")
-        if not isinstance(self.key, bytes):
-            logger.error(f"Invalid key type for user {self.user_id}: {type(self.key)}")
-            raise ValueError(f"Invalid key type for user {self.user_id}: Expected bytes, got {type(self.key)}")
-        logger.debug(f"Retrieved encryption key for user {self.user_id}")
-        return self.key
-            
-            
+    def verify_hash(password: str, hash_value: str) -> bool:
+        return pbkdf2_sha256.verify(password, hash_value)
