@@ -9,12 +9,15 @@ from hashlib import pbkdf2_hmac
 from werkzeug.utils import secure_filename
 from app.models.user import User
 from app.models.file import File
+from app.services.storage import FileStorageService
 from config import Config
+import logging
 
 encrypted_file_path = Config.ENCRYPTED_FILE_PATH  
 
 filedb = File
-logger = logging.getLogger(__name__)
+file_service = FileStorageService()
+logger = logging.getLogger()
 
 class EncryptionService:
     @staticmethod
@@ -26,40 +29,36 @@ class EncryptionService:
         return key, salt
 
     @staticmethod
-    def encrypt(file: bytes, filepath: str):
-            try:
-                key = current_user.get_key() 
-            except ValueError as e:
-                logger.error(f"Failed to get encryption key: {str(e)}")
-                raise
-            
-            if len(key) not in (16, 24, 32):
-                logger.error(f"Invalid key length for user {current_user.user_id}: {len(key)} bytes")
-            
+    def encrypt(file, filename: str):
+        key = User.get_key(current_user)
+        if len(key) not in (16, 24, 32):
+            logger.error(f"Invalid key length for user {current_user.user_id}: {len(key)} bytes")
+        else:
+            data = file.read()
+
             cipher = AES.new(key, AES.MODE_GCM)
             f_id = str(uuid.uuid4())
             nonce = cipher.nonce
-            ciphertext, tag = cipher.encrypt_and_digest(file)
-            encrypted_data = ciphertext + tag
+
+            ciphertext, tag = cipher.encrypt_and_digest(data)
+            encrypted_data = nonce + tag + ciphertext  
+            EncryptionService.save_file(encrypted_data, filename, file_id=f_id)
             logger.debug(f"File encrypted successfully, file_id: {f_id}")
-            
-            return encrypted_data, f_id, nonce
-    
+
+            return
+
     @staticmethod
-    def save_file(filename, data: bytes, file_id):
+    def save_file(data:bytes, filename:str, file_id):
         safe_name = secure_filename(filename)
         file_path = os.path.join(encrypted_file_path, safe_name)
-        os.makedirs(encrypted_file_path, exist_ok=True)
         try:
-            with open(file_path, 'wb') as f:
-                f.write(data)
+            file_service.save_file(file_data=data, filename=safe_name)
             logger.info(f"Saved encrypted file: {safe_name} at {file_path}")
         except Exception as e:
             logger.error(f"Failed to save file: {e}")
             raise
         else:
             filedb.add_file(filename=safe_name, filepath=file_path, file_id=file_id, owner_id=current_user.user_id)
-     
 
     @staticmethod
     def decrypt(file_data):
@@ -67,7 +66,7 @@ class EncryptionService:
         nonce = file_data[:16]  
         tag = file_data[16:32] 
         ciphertext = file_data[32:]
-        
+
         try:
             cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
             plaindata = cipher.decrypt_and_verify(ciphertext, tag)

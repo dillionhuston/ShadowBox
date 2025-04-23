@@ -1,7 +1,7 @@
 import logging
 import uuid
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from passlib.hash import pbkdf2_sha256
 from . import db
 
@@ -75,3 +75,7 @@ class User(UserMixin, db.Model):
     @staticmethod
     def verify_hash(password: str, hash_value: str) -> bool:
         return pbkdf2_sha256.verify(password, hash_value)
+    
+    def get_key(self):
+        print(current_user)
+        return(current_user.key)
