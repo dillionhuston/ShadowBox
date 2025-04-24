@@ -1,4 +1,4 @@
-# ShadowBox API Reference
+# ShadowBox API Reference (ShadowBox_V2)
 
 ## Core Services
 
