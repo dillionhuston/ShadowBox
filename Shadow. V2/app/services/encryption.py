@@ -43,20 +43,25 @@ class EncryptionService:
             ciphertext, tag = cipher.encrypt_and_digest(data)
             encrypted_data = nonce + tag + ciphertext  
             EncryptionService.save_file(encrypted_data, filename)
+            
             return
 
 
     @staticmethod
     def save_file(data:bytes, filename:str):
+
         safe_name = secure_filename(filename)
         file_path = os.path.join(encrypted_file_path, safe_name)
+
         try:
+            #calls save.file in FileStorage class
             file_service.save_file(file_data=data, filename=safe_name)
             logger.info(f"Saved encrypted file: {safe_name} at {file_path}")
         except Exception as e:
             logger.error(f"Failed to save file: {e}")
             raise
         else:
+            #add metadata to database
             filedb.add_file(filename=safe_name, filepath=file_path)
 
     @staticmethod

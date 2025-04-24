@@ -1,6 +1,7 @@
 from . import db
 import uuid
 from flask_login import current_user
+from sqlalchemy import Index
 
 class File(db.Model):
     __tablename__ = "files"
@@ -8,7 +9,13 @@ class File(db.Model):
     owner_id = db.Column(db.String(64), db.ForeignKey('user.id'), nullable=False)
     file_path = db.Column(db.String(500), nullable=False)
     file_name = db.Column(db.String(300), nullable=False)
-    file_hash = db.Column(db.String(300), nullable=False)
+    #file_hash = db.Column(db.String(300), nullable=False)
+
+
+    __table_args__ = (
+    Index('ix_user_file', 'owner_id', 'file_name'),
+    )
+
 
 
     @staticmethod
@@ -19,7 +26,7 @@ class File(db.Model):
             file_path=filepath, 
             file_name=filename
         )
-        print(newfile.file_id)
+        print(f" added new file : {newfile.file_id} user ID: {newfile.owner_id}")
         db.session.add(newfile)
         db.session.commit()
         return newfile
