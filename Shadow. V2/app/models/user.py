@@ -22,10 +22,7 @@ class User(UserMixin, db.Model):
         return self.id 
 
 
-    def get_current_user(self):
-        return current_user
-    
-    
+    """later in development, some security should be done here. checking lengh of passwords, preventing web injection """
     @staticmethod
     def add_user(username: str, email: str, password: str) -> 'User':
         """hashes password, generates key and salt for user. adds new user to database"""
@@ -35,7 +32,6 @@ class User(UserMixin, db.Model):
 
         try:
             hashed_password = User.hash_password(password)
-
             service = EncryptionService()
             key, salt = service.generate_key(password)
             logger.debug(f"Generated encryption key for user {username}")
@@ -56,12 +52,8 @@ class User(UserMixin, db.Model):
         
         except IntegrityError as e:
             db.session.rollback()
-            logger.error(f"Failed to create user {username}: Username or email already exists - {str(e)}")
             raise ValueError("Username or email already taken")
-        except Exception as e:
-            db.session.rollback()
-            logger.error(f"Unexpected error creating user {username}: {str(e)}")
-            raise Exception(f"Failed to create user: {str(e)}")
+    
         
     @staticmethod
     def remove_user(user_id: str) -> bool:

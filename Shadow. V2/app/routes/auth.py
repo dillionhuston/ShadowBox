@@ -9,6 +9,8 @@ auth_bp = Blueprint('auth', __name__)
 def signup_page():
     return render_template('signup.html')
 
+
+
 # Handle Sign Up (POST)
 @auth_bp.route('/signup', methods=['POST'])
 def signup():
@@ -34,10 +36,14 @@ def signup():
         
     return render_template('signup.html')
 
+
+
 # Login Page (GET)
 @auth_bp.route('/login', methods=['GET'])
 def login_page():
     return render_template('login.html')
+
+
 
 # Handle Login (POST)
 @auth_bp.route('/login', methods=['POST'])
@@ -58,6 +64,7 @@ def login():
         flash('Invalid username or password.')
     
     return render_template('login.html')
+
 
 # Logout
 @auth_bp.route('/logout')

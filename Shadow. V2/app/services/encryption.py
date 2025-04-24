@@ -13,7 +13,6 @@ from app.models.file import File
 from app.services.storage import FileStorageService
 from config import Config
 
-
 encrypted_file_path = Config.ENCRYPTED_FILE_PATH  
 
 filedb = File()
@@ -29,6 +28,8 @@ class EncryptionService:
         logger.debug("Key generated with PBKDF2.")
         return key, salt
 
+
+    """Gets key of current user, """
     @staticmethod
     def encrypt(file, filename: str):
         key = User.get_key(current_user)
@@ -36,16 +37,14 @@ class EncryptionService:
             logger.error(f"Invalid key length for user {current_user.user_id}: {len(key)} bytes")
         else:
             data = file.read()
-
             cipher = AES.new(key, AES.MODE_GCM)
             nonce = cipher.nonce
 
             ciphertext, tag = cipher.encrypt_and_digest(data)
             encrypted_data = nonce + tag + ciphertext  
             EncryptionService.save_file(encrypted_data, filename)
-           
-
             return
+
 
     @staticmethod
     def save_file(data:bytes, filename:str):

@@ -8,6 +8,8 @@ class File(db.Model):
     owner_id = db.Column(db.String(64), db.ForeignKey('user.id'), nullable=False)
     file_path = db.Column(db.String(500), nullable=False)
     file_name = db.Column(db.String(300), nullable=False)
+    file_hash = db.Column(db.String(300), nullable=False)
+
 
     @staticmethod
     def add_file(filepath:str, filename:str):

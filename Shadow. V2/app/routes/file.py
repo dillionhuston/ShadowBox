@@ -12,10 +12,13 @@ file_bp = Blueprint('file', __name__, template_folder='templates')
 encrypted_folder = Config.ENCRYPTED_FILE_PATH
 logger = logging.getLogger(__name__)
 
+
 @file_bp.route('/upload', methods=['GET'])
 @login_required
 def upload_page():
     return render_template('upload.html')
+
+
 
 @file_bp.route('/upload', methods=['POST'])
 @login_required

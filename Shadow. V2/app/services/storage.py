@@ -7,9 +7,12 @@ encrypted_file_path = Config.ENCRYPTED_FILE_PATH
 
 
 class FileStorageService:
-
-
     #currently not used but possibly in future?
+
+    def create_hash_file(self, file):
+        return file
+
+
     @staticmethod
     def read_file(filedata):
         if filedata is None:
