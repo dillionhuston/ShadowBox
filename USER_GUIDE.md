@@ -77,4 +77,5 @@ For the best security:
 
 ### Getting Help
 
-If you encounter any issues or have questions about using the system, please contact the system administrator or support team.
+If you encounter any issues or have questions about using the system, please contact right away
+
