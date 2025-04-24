@@ -14,7 +14,7 @@
 
 ShadowBox is a **privacy-first**, **encrypted** cloud storage solution built with **Python**, **Flask**, and **SQL**. Designed for security and scalability, it leverages **object-oriented programming** principles to ensure maintainability. Our vision is a decentralized, secure file-sharing platform that puts user control first.
 
-![ShadowBox Demo](https://via.placeholder.com/800x400?text=ShadowBox+Demo)
+
 
 ---
 ## 🎯 Core Features (MVP)
